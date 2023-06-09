@@ -16,4 +16,7 @@
     <string name="cmd_poweroff">关机</string>
     <string name="btn_connect">连接</string>
     <string name="toast_device_not_found">未找到设备</string>
+    <string name="cmd_ldac_off">LDAC: OFF</string>
+    <string name="cmd_ldac_48k">LDAC: 48kHz/44.1kHz</string>
+    <string name="cmd_ldac_96k">LDAC: 96kHz</string>
 </resources>

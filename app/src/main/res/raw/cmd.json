@@ -38,5 +38,17 @@
     {
         "name": "cmd_poweroff",
         "cmd": "CE"
+    },
+    {
+        "name": "cmd_ldac_off",
+        "cmd": "4900"
+    },
+    {
+        "name": "cmd_ldac_48k",
+        "cmd": "4901"
+    },
+    {
+        "name": "cmd_ldac_96k",
+        "cmd": "4902"
     }
 ]
