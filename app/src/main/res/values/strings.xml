@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name" translatable="false">mEDIFIER</string>
+
+    <string name="cmd_noise_normal">Noise: Normal Mode</string>
+    <string name="cmd_noise_reduction">Noise: Noise Reduction Mode</string>
+    <string name="cmd_noise_ambient">Noise: Ambient Sound Mode</string>
+    <string name="cmd_eq_normal">EQ: Normal</string>
+    <string name="cmd_eq_pop">EQ: POP</string>
+    <string name="cmd_eq_classical">EQ: Classical</string>
+    <string name="cmd_eq_rock">EQ: Rock</string>
+    <string name="cmd_game_on">Game Mode: ON</string>
+    <string name="cmd_game_off">Game Mode: OFF</string>
+    <string name="cmd_poweroff">Poweroff</string>
+
+    <string name="toast_no_bluetooth">Bluetooth adapter not found</string>
+    <string name="toast_bluetooth_not_open">Bluetooth not open</string>
+    <string name="toast_device_not_connected">Device not connected</string>
+    <string name="toast_device_connected">Device connected</string>
+    <string name="toast_device_not_found">Device not found</string>
+
+    <string name="btn_connect">Connect</string>
+</resources>

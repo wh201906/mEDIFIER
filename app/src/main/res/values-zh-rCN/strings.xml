@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cmd_noise_normal">降噪: 标准模式</string>
+    <string name="cmd_noise_reduction">降噪: 降噪模式</string>
+    <string name="cmd_noise_ambient">降噪: 环境声模式</string>
+    <string name="toast_no_bluetooth">设备不支持蓝牙</string>
+    <string name="toast_bluetooth_not_open">蓝牙未开启</string>
+    <string name="toast_device_not_connected">设备未连接</string>
+    <string name="toast_device_connected">设备已连接</string>
+    <string name="cmd_eq_normal">EQ: 经典模式</string>
+    <string name="cmd_eq_pop">EQ: 流行模式</string>
+    <string name="cmd_eq_classical">EQ: 古典模式</string>
+    <string name="cmd_eq_rock">EQ: 摇滚模式</string>
+    <string name="cmd_game_on">游戏模式: 开</string>
+    <string name="cmd_game_off">游戏模式: 关</string>
+    <string name="cmd_poweroff">关机</string>
+    <string name="btn_connect">连接</string>
+    <string name="toast_device_not_found">未找到设备</string>
+</resources>

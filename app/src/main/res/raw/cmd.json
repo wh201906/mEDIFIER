@@ -1,0 +1,42 @@
+[
+    {
+        "name": "cmd_noise_normal",
+        "cmd": "C101"
+    },
+    {
+        "name": "cmd_noise_reduction",
+        "cmd": "C102"
+    },
+    {
+        "name": "cmd_noise_ambient",
+        "cmd": "C103"
+    },
+    {
+        "name": "cmd_eq_normal",
+        "cmd": "C400"
+    },
+    {
+        "name": "cmd_eq_pop",
+        "cmd": "C401"
+    },
+    {
+        "name": "cmd_eq_classical",
+        "cmd": "C402"
+    },
+    {
+        "name": "cmd_eq_rock",
+        "cmd": "C403"
+    },
+    {
+        "name": "cmd_game_on",
+        "cmd": "0901"
+    },
+    {
+        "name": "cmd_game_off",
+        "cmd": "0900"
+    },
+    {
+        "name": "cmd_poweroff",
+        "cmd": "CE"
+    }
+]
