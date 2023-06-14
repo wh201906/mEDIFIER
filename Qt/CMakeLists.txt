@@ -60,8 +60,14 @@ else()
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
-        # On Qt 5.15.2 with Qt Creator 10.0.1, this won't take effect until you change the CMakeLists.txt then compile it.
-        set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+        # Write to the CMake cache: https://stackoverflow.com/a/65989729
+        # However, On Qt 5.15.2 with Qt Creator 10.0.1, this won't take effect unless you try these things:
+        # + Change the CMakeLists.txt somehow, like adding a single empty line
+        # + Delete the build directory
+        # + Run "rebuild"
+        # and it might not work after doing these things.
+        # Totally unreasonable
+        set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android" CACHE INTERNAL "")
     else()
         add_executable(mEDIFIER
             ${PROJECT_SOURCES}
