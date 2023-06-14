@@ -71,6 +71,12 @@ readData:BB02060F20EB
 
 关机
 sendData:AA01CE2192
+断开蓝牙
+sendData:AA01CD2191
+重新配对
+sendData:AA01CF2193
+恢复出厂设置
+sendData:AA010720CB
 
 定时关机
 off
