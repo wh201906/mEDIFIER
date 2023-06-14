@@ -35,6 +35,9 @@ private:
 
     QBluetoothDeviceDiscoveryAgent *m_discoveryAgent = nullptr;
     bool m_isCurrDiscoveryMethodBLE = false;
+#ifdef Q_OS_ANDROID
+    void getBondedTarget(bool isBLE);
+#endif
 signals:
     void connectTo(const QString& address, bool isBLE);
     void disconnectDevice();

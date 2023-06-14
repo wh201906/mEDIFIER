@@ -3,6 +3,10 @@
 
 #include <QDebug>
 #include <QBluetoothUuid>
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#include <QAndroidJniEnvironment>
+#endif
 
 DeviceForm::DeviceForm(QWidget *parent) :
     QWidget(parent),
@@ -43,6 +47,9 @@ void DeviceForm::onSearchButtonClicked()
         return;
     }
     ui->deviceTableWidget->setRowCount(0);
+#ifdef Q_OS_ANDROID
+    getBondedTarget(m_isCurrDiscoveryMethodBLE);
+#endif
     m_discoveryAgent->start(m_isCurrDiscoveryMethodBLE ?
                             QBluetoothDeviceDiscoveryAgent::LowEnergyMethod :
                             QBluetoothDeviceDiscoveryAgent::ClassicMethod);
@@ -56,13 +63,13 @@ void DeviceForm::onDeviceDiscovered(const QBluetoothDeviceInfo &info)
 {
     QString address = info.address().toString();
     QString name = info.name();
-    QTableWidget* deviceList = ui->deviceTableWidget;
+    QTableWidget* deviceTable = ui->deviceTableWidget;
     int i;
 
-    i = deviceList->rowCount();
-    deviceList->setRowCount(i + 1);
-    deviceList->setItem(i, 0, new QTableWidgetItem(name));
-    deviceList->setItem(i, 1, new QTableWidgetItem(address));
+    i = deviceTable->rowCount();
+    deviceTable->setRowCount(i + 1);
+    deviceTable->setItem(i, 0, new QTableWidgetItem(name));
+    deviceTable->setItem(i, 1, new QTableWidgetItem(address));
     QTableWidgetItem* typeItem = new QTableWidgetItem();
 
     if(m_isCurrDiscoveryMethodBLE)
@@ -70,7 +77,7 @@ void DeviceForm::onDeviceDiscovered(const QBluetoothDeviceInfo &info)
     else
         typeItem->setText(tr("RFCOMM"));
     typeItem->setData(Qt::UserRole, m_isCurrDiscoveryMethodBLE);
-    deviceList->setItem(i, 2, typeItem);
+    deviceTable->setItem(i, 2, typeItem);
 
 
     qDebug() << name
@@ -128,4 +135,44 @@ void DeviceForm::on_searchStopButton_clicked()
     m_discoveryAgent->stop();
     onDiscoverFinished();
 }
+
+#ifdef Q_OS_ANDROID
+void DeviceForm::getBondedTarget(bool isBLE)
+{
+    QAndroidJniEnvironment env;
+    QtAndroid::PermissionResult r = QtAndroid::checkPermission("android.permission.ACCESS_FINE_LOCATION");
+    if(r == QtAndroid::PermissionResult::Denied)
+    {
+        QtAndroid::requestPermissionsSync(QStringList() << "android.permission.ACCESS_FINE_LOCATION");
+        r = QtAndroid::checkPermission("android.permission.ACCESS_FINE_LOCATION");
+        if(r == QtAndroid::PermissionResult::Denied)
+        {
+            qDebug() << "failed to request";
+        }
+    }
+    qDebug() << "has permission";
+    QAndroidJniObject array = QtAndroid::androidActivity().callObjectMethod("getBondedDevices", "(Z)[Ljava/lang/String;", isBLE);
+    int arraylen = env->GetArrayLength(array.object<jarray>());
+    qDebug() << "arraylen:" << arraylen;
+    QTableWidget* deviceTable = ui->deviceTableWidget;
+    deviceTable->setRowCount(arraylen);
+    for(int i = 0; i < arraylen; i++)
+    {
+        QString info = QAndroidJniObject::fromLocalRef(env->GetObjectArrayElement(array.object<jobjectArray>(), i)).toString();
+        QString address = info.left(info.indexOf(' '));
+        QString name = info.right(info.length() - info.indexOf(' ') - 1);
+        qDebug() << address << name;
+        deviceTable->setItem(i, 0, new QTableWidgetItem(name));
+        deviceTable->setItem(i, 1, new QTableWidgetItem(address));
+        QTableWidgetItem* typeItem = new QTableWidgetItem();
+
+        if(isBLE)
+            typeItem->setText(tr("BLE"));
+        else
+            typeItem->setText(tr("RFCOMM"));
+        typeItem->setData(Qt::UserRole, isBLE);
+        deviceTable->setItem(i, 2, typeItem);
+    }
+}
+#endif
 

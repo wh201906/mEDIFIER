@@ -12,8 +12,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Bluetooth)
+if(ANDROID)
+    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS AndroidExtras)
+endif()
 
 set(TS_FILES mEDIFIER_zh_CN.ts)
+set(ANDROID_FILES
+    android/AndroidManifest.xml
+    android/build.gradle
+    android/gradle.properties
+    android/java/priv/wh201906/medifier/qt/MainActivity.java
+)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -30,7 +39,7 @@ set(PROJECT_SOURCES
         mainwindow.ui
         deviceform.ui
         w820nbplusform.ui
-        android/AndroidManifest.xml
+        ${ANDROID_FILES}
         ${TS_FILES}
 )
 
@@ -51,6 +60,7 @@ else()
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
+        # On Qt 5.15.2 with Qt Creator 10.0.1, this won't take effect until you change the CMakeLists.txt then compile it.
         set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(mEDIFIER
@@ -63,6 +73,9 @@ endif()
 
 target_link_libraries(mEDIFIER PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(mEDIFIER PRIVATE Qt${QT_VERSION_MAJOR}::Bluetooth)
+if(ANDROID)
+    target_link_libraries(mEDIFIER PRIVATE Qt${QT_VERSION_MAJOR}::AndroidExtras)
+endif()
 
 set_target_properties(mEDIFIER PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
