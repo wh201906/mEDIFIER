@@ -16,6 +16,9 @@ public:
     explicit W820NBPlusForm(QWidget *parent = nullptr);
     ~W820NBPlusForm();
 
+public slots:
+    void processData(const QByteArray &data);
+    void readSettings();
 private:
     Ui::W820NBPlusForm *ui;
 
@@ -42,6 +45,10 @@ private slots:
     void on_re_pairButton_clicked();
     void on_resetButton_clicked();
     void onBtnInLDACGroupClicked();
+    void on_nameSetButton_clicked();
+    void on_batteryGetButton_clicked();
+    void on_MACGetButton_clicked();
+    void on_firmwareGetButton_clicked();
 };
 
 #endif // W820NBPLUSFORM_H

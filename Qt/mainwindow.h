@@ -34,7 +34,10 @@ private slots:
     void connectToDevice(const QString &address, bool isBLE);
     void disconnectDevice();
     void onCommStateChanged(bool state);
+    void on_readSettingsButton_clicked();
+
 signals:
     void commStateChanged(bool connected);
+    void readSettings();
 };
 #endif // MAINWINDOW_H

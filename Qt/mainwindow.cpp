@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "ui_mainwindow.h"
 #include "commrfcomm.h"
 
 #include <QDebug>
@@ -51,6 +51,8 @@ void MainWindow::connectToDevice(const QString& address, bool isBLE)
     connect(m_comm, &Comm::stateChanged, this, &MainWindow::onCommStateChanged);
     connect(m_w820p, QOverload<const QByteArray&, bool>::of(&W820NBPlusForm::sendCommand), m_comm, QOverload<const QByteArray&, bool>::of(&Comm::sendCommand));
     connect(m_w820p, QOverload<const char*, bool>::of(&W820NBPlusForm::sendCommand), m_comm, QOverload<const char*, bool>::of(&Comm::sendCommand));
+    connect(m_comm, &Comm::newData, m_w820p, &W820NBPlusForm::processData);
+    connect(this, &MainWindow::readSettings, m_w820p, &W820NBPlusForm::readSettings);
     m_comm->open(address);
 }
 
@@ -74,3 +76,9 @@ void MainWindow::onCommStateChanged(bool state)
         emit commStateChanged(false);
     }
 }
+
+void MainWindow::on_readSettingsButton_clicked()
+{
+    emit readSettings();
+}
+

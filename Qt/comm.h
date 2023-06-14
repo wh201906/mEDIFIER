@@ -11,7 +11,9 @@ public:
     virtual void open(const QString& address) = 0;
     virtual void close() = 0;
     static QByteArray addPacketHead(QByteArray cmd);
-    static QByteArray addChecksum(QByteArray cmd);
+    static QByteArray addChecksum(QByteArray data);
+    static QByteArray removeCheckSum(QByteArray data);
+    static QByteArray checkValidity(QByteArray data);
 public slots:
     bool sendCommand(const QByteArray& cmd, bool isRaw = false);
     bool sendCommand(const char* hexCmd, bool isRaw = false);
