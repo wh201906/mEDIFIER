@@ -35,6 +35,7 @@ private:
 
     QBluetoothDeviceDiscoveryAgent *m_discoveryAgent = nullptr;
     bool m_isCurrDiscoveryMethodBLE = false;
+    QStringList m_shownDevices;
 #ifdef Q_OS_ANDROID
     void getBondedTarget(bool isBLE);
 #endif

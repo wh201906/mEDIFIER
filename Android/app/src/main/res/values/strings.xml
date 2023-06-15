@@ -14,6 +14,9 @@
     <string name="cmd_ldac_48k">LDAC: 48kHz/44.1kHz</string>
     <string name="cmd_ldac_96k">LDAC: 96kHz</string>
     <string name="cmd_poweroff">Poweroff</string>
+    <string name="cmd_disconnect">Disconnect</string>
+    <string name="cmd_re_pair">Re-pair</string>
+    <string name="cmd_factory_reset">Factory Reset</string>
 
     <string name="toast_no_bluetooth">Bluetooth adapter not found</string>
     <string name="toast_bluetooth_not_open">Bluetooth not open</string>

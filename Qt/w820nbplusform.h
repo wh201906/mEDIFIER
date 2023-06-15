@@ -25,6 +25,7 @@ private:
 signals:
     void sendCommand(const QByteArray& cmd, bool isRaw = false);
     void sendCommand(const char* hexCmd, bool isRaw = false);
+    void showMessage(const QString& msg);
 private slots:
     void onBtnInNoiseGroupClicked();
     void onBtnInSoundEffectGroupClicked();
@@ -49,6 +50,13 @@ private slots:
     void on_batteryGetButton_clicked();
     void on_MACGetButton_clicked();
     void on_firmwareGetButton_clicked();
+    void on_cmdSentButton_clicked();
+    void on_PCPlayButton_clicked();
+    void on_PCPauseButton_clicked();
+    void on_PCVolUpButton_clicked();
+    void on_PCVolDownButton_clicked();
+    void on_PCPrevButton_clicked();
+    void on_PCNextButton_clicked();
 };
 
 #endif // W820NBPLUSFORM_H

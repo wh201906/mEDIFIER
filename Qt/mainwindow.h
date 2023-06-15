@@ -23,6 +23,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void showMessage(const QString &msg);
 private:
     Ui::MainWindow *ui;
 

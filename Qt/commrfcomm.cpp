@@ -31,7 +31,13 @@ void CommRFCOMM::onStateChanged()
 {
     QBluetoothSocket::SocketState state = m_socket->state();
     if(state == QBluetoothSocket::ConnectedState)
+    {
         emit stateChanged(true);
+        emit showMessage(tr("Device Connected"));
+    }
     else if(state == QBluetoothSocket::UnconnectedState)
+    {
         emit stateChanged(false);
+        emit showMessage(tr("Device Disconnected"));
+    }
 }

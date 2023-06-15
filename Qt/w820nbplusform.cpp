@@ -75,11 +75,11 @@ void W820NBPlusForm::onCheckBoxInControlSettingsGroupClicked()
 void W820NBPlusForm::onBtnInLDACGroupClicked()
 {
     if(ui->LDACOFFButton->isChecked())
-        emit sendCommand("C400");
+        emit sendCommand("4900");
     else if(ui->LDAC48kButton->isChecked())
-        emit sendCommand("C401");
+        emit sendCommand("4901");
     else if(ui->LDAC96kButton->isChecked())
-        emit sendCommand("C402");
+        emit sendCommand("4902");
 }
 
 void W820NBPlusForm::on_gameModeBox_clicked()
@@ -112,6 +112,8 @@ void W820NBPlusForm::on_ASSetButton_clicked()
     QByteArray cmd = "\xC1\x03";
     cmd += (char)(6 + ui->ASBox->value());
     emit sendCommand(cmd);
+    // setting ambient sound volume triggers ambient sound mode
+    ui->noiseAmbientSoundButton->setChecked(true);
 }
 
 
@@ -293,7 +295,7 @@ void W820NBPlusForm::processData(const QByteArray& data)
 
 void W820NBPlusForm::readSettings()
 {
-    const int interval = 200;
+    const int interval = 150;
     int i = 0;
 
     QTimer::singleShot(i, [ = ] {on_batteryGetButton_clicked();});
@@ -334,5 +336,47 @@ void W820NBPlusForm::on_MACGetButton_clicked()
 void W820NBPlusForm::on_firmwareGetButton_clicked()
 {
     emit sendCommand("C6");
+}
+
+
+void W820NBPlusForm::on_cmdSentButton_clicked()
+{
+    emit sendCommand(QByteArray::fromHex(ui->cmdEdit->text().toLatin1()), ui->cmdRawBox->isChecked());
+}
+
+
+void W820NBPlusForm::on_PCPlayButton_clicked()
+{
+    emit sendCommand("C200");
+}
+
+
+void W820NBPlusForm::on_PCPauseButton_clicked()
+{
+    emit sendCommand("C201");
+}
+
+
+void W820NBPlusForm::on_PCVolUpButton_clicked()
+{
+    emit sendCommand("C202");
+}
+
+
+void W820NBPlusForm::on_PCVolDownButton_clicked()
+{
+    emit sendCommand("C203");
+}
+
+
+void W820NBPlusForm::on_PCPrevButton_clicked()
+{
+    emit sendCommand("C205");
+}
+
+
+void W820NBPlusForm::on_PCNextButton_clicked()
+{
+    emit sendCommand("C204");
 }
 

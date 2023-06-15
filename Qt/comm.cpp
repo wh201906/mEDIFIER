@@ -11,11 +11,11 @@ Comm::Comm(QObject *parent)
 
 bool Comm::sendCommand(const QByteArray& cmd, bool isRaw)
 {
-    qDebug() << "send:" << cmd.toHex();
-    if(isRaw)
-        return write(cmd);
-    else
-        return write(addChecksum(addPacketHead(cmd)));
+    QByteArray data = cmd;
+    if(!isRaw)
+        data = addChecksum(addPacketHead(cmd));
+    qDebug() << "send:" << data.toHex();
+    return write(data);
 }
 
 bool Comm::sendCommand(const char *hexCmd, bool isRaw)
@@ -73,7 +73,8 @@ QByteArray Comm::checkValidity(QByteArray data)
     if(data[0] != '\xBB' && data[0] != '\xCC')
     {
         qDebug() << "error:"
-                 << "unexpected head:" << (int)data[0];
+                 << "unexpected head:" << (int)data[0]
+                 << "data:" << data.toHex();
         return QByteArray();
     }
     int expectedLength = (int)data[1] + 4;
@@ -81,7 +82,8 @@ QByteArray Comm::checkValidity(QByteArray data)
     {
         qDebug() << "packet length error:"
                  << "expected:" << expectedLength
-                 << "received:" << data.length();
+                 << "received:" << data.length()
+                 << "data:" << data.toHex();
         return QByteArray();
     }
     return removeCheckSum(data);

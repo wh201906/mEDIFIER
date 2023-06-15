@@ -36,10 +36,6 @@
         "cmd": "0900"
     },
     {
-        "name": "cmd_poweroff",
-        "cmd": "CE"
-    },
-    {
         "name": "cmd_ldac_off",
         "cmd": "4900"
     },
@@ -50,5 +46,21 @@
     {
         "name": "cmd_ldac_96k",
         "cmd": "4902"
+    },
+    {
+        "name": "cmd_poweroff",
+        "cmd": "CE"
+    },
+    {
+        "name": "cmd_disconnect",
+        "cmd": "CD"
+    },
+    {
+        "name": "cmd_re_pair",
+        "cmd": "CF"
+    },
+    {
+        "name": "cmd_factory_reset",
+        "cmd": "07"
     }
 ]

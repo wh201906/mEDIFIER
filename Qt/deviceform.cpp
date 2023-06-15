@@ -21,6 +21,8 @@ DeviceForm::DeviceForm(QWidget *parent) :
     ui->disconnectButton->setVisible(false);
     ui->searchStopButton->setVisible(false);
 
+    ui->deviceTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
     connect(ui->searchRFCOMMButton, &QPushButton::clicked, this, &DeviceForm::onSearchButtonClicked);
     connect(ui->searchBLEButton, &QPushButton::clicked, this, &DeviceForm::onSearchButtonClicked);
     connect(ui->deviceTableWidget, &QTableWidget::cellClicked, this, &DeviceForm::onDeviceTableCellClicked);
@@ -47,6 +49,7 @@ void DeviceForm::onSearchButtonClicked()
         return;
     }
     ui->deviceTableWidget->setRowCount(0);
+    m_shownDevices.clear();
 #ifdef Q_OS_ANDROID
     getBondedTarget(m_isCurrDiscoveryMethodBLE);
 #endif
@@ -63,6 +66,11 @@ void DeviceForm::onDeviceDiscovered(const QBluetoothDeviceInfo &info)
 {
     QString address = info.address().toString();
     QString name = info.name();
+    if(m_shownDevices.contains(address, Qt::CaseInsensitive))
+    {
+        qDebug() << "dumplicate:" << address << name;
+        return;
+    }
     QTableWidget* deviceTable = ui->deviceTableWidget;
     int i;
 
@@ -78,6 +86,7 @@ void DeviceForm::onDeviceDiscovered(const QBluetoothDeviceInfo &info)
         typeItem->setText(tr("RFCOMM"));
     typeItem->setData(Qt::UserRole, m_isCurrDiscoveryMethodBLE);
     deviceTable->setItem(i, 2, typeItem);
+    m_shownDevices.append(address);
 
 
     qDebug() << name
@@ -172,6 +181,7 @@ void DeviceForm::getBondedTarget(bool isBLE)
             typeItem->setText(tr("RFCOMM"));
         typeItem->setData(Qt::UserRole, isBLE);
         deviceTable->setItem(i, 2, typeItem);
+        m_shownDevices.append(address);
     }
 }
 #endif

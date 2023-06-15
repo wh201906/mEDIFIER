@@ -24,6 +24,7 @@ protected slots:
 signals:
     void newData(const QByteArray& data);
     void stateChanged(bool connected);
+    void showMessage(const QString& msg);
 };
 
 #endif // COMM_H
