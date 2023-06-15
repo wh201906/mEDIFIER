@@ -2,228 +2,315 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
+    <name>CommRFCOMM</name>
+    <message>
+        <location filename="commrfcomm.cpp" line="36"/>
+        <source>Device Connected</source>
+        <translation>设备已连接</translation>
+    </message>
+    <message>
+        <location filename="commrfcomm.cpp" line="41"/>
+        <source>Device Disconnected</source>
+        <translation>设备已断开</translation>
+    </message>
+</context>
+<context>
     <name>DeviceForm</name>
     <message>
-        <location filename="deviceform.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="deviceform.ui" line="35"/>
+        <location filename="deviceform.ui" line="32"/>
         <source>Search RFCOMM</source>
-        <translation type="unfinished"></translation>
+        <translation>搜索RFCOMM设备</translation>
     </message>
     <message>
-        <location filename="deviceform.ui" line="42"/>
+        <location filename="deviceform.ui" line="39"/>
         <source>Search BLE</source>
-        <translation type="unfinished"></translation>
+        <translation>搜索BLE设备</translation>
     </message>
     <message>
-        <location filename="deviceform.ui" line="49"/>
+        <location filename="deviceform.ui" line="46"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>停止</translation>
     </message>
     <message>
-        <location filename="deviceform.ui" line="68"/>
+        <location filename="deviceform.ui" line="65"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>设备名</translation>
     </message>
     <message>
-        <location filename="deviceform.ui" line="73"/>
+        <location filename="deviceform.ui" line="70"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>地址</translation>
     </message>
     <message>
-        <location filename="deviceform.ui" line="78"/>
+        <location filename="deviceform.ui" line="75"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>类型</translation>
     </message>
     <message>
-        <location filename="deviceform.ui" line="94"/>
+        <location filename="deviceform.ui" line="91"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>连接</translation>
     </message>
     <message>
-        <location filename="deviceform.ui" line="101"/>
+        <location filename="deviceform.ui" line="98"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="deviceform.cpp" line="14"/>
-        <location filename="deviceform.cpp" line="71"/>
+        <location filename="deviceform.cpp" line="18"/>
+        <location filename="deviceform.cpp" line="86"/>
+        <location filename="deviceform.cpp" line="181"/>
         <source>RFCOMM</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="deviceform.cpp" line="15"/>
-        <location filename="deviceform.cpp" line="69"/>
+        <location filename="deviceform.cpp" line="19"/>
+        <location filename="deviceform.cpp" line="84"/>
+        <location filename="deviceform.cpp" line="179"/>
         <source>BLE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <location filename="mainwindow.ui" line="14"/>
-        <source>MainWindow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="28"/>
-        <source>Tab 1</source>
-        <translation type="unfinished"></translation>
+        <source>mEDIFIER</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="68"/>
         <source>Read Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>读取设置</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="18"/>
+        <location filename="mainwindow.cpp" line="23"/>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>设备</translation>
     </message>
 </context>
 <context>
     <name>W820NBPlusForm</name>
     <message>
         <location filename="w820nbplusform.ui" line="20"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
+        <source>W820NB Plus</source>
+        <translation>W820NB双金标版</translation>
     </message>
     <message>
         <location filename="w820nbplusform.ui" line="26"/>
+        <source>Info</source>
+        <translation>信息</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="34"/>
+        <source>Battery:</source>
+        <translation>电量：</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="48"/>
+        <location filename="w820nbplusform.ui" line="73"/>
+        <location filename="w820nbplusform.ui" line="98"/>
+        <source>Get</source>
+        <translation>获取</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="59"/>
+        <source>MAC Address:</source>
+        <translation>MAC地址：</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="84"/>
+        <source>Firmware Version:</source>
+        <translation>固件版本：</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="110"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>设备名</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="43"/>
+        <location filename="w820nbplusform.ui" line="127"/>
         <source>Takes effect after removing the pairing record and re-pairing</source>
-        <translation type="unfinished"></translation>
+        <translation>删除配对记录并重新配对后生效</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="53"/>
-        <location filename="w820nbplusform.ui" line="133"/>
-        <location filename="w820nbplusform.ui" line="259"/>
-        <location filename="w820nbplusform.ui" line="314"/>
+        <location filename="w820nbplusform.ui" line="137"/>
+        <location filename="w820nbplusform.ui" line="217"/>
+        <location filename="w820nbplusform.ui" line="343"/>
+        <location filename="w820nbplusform.ui" line="398"/>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>设置</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="65"/>
-        <location filename="w820nbplusform.ui" line="78"/>
-        <location filename="w820nbplusform.ui" line="158"/>
+        <location filename="w820nbplusform.ui" line="149"/>
+        <location filename="w820nbplusform.ui" line="162"/>
+        <location filename="w820nbplusform.ui" line="242"/>
         <source>Noise Reduction</source>
-        <translation type="unfinished"></translation>
+        <translation>降噪</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="71"/>
-        <location filename="w820nbplusform.ui" line="151"/>
-        <location filename="w820nbplusform.ui" line="193"/>
+        <location filename="w820nbplusform.ui" line="155"/>
+        <location filename="w820nbplusform.ui" line="235"/>
+        <location filename="w820nbplusform.ui" line="277"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>标准</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="85"/>
-        <location filename="w820nbplusform.ui" line="95"/>
-        <location filename="w820nbplusform.ui" line="165"/>
+        <location filename="w820nbplusform.ui" line="169"/>
+        <location filename="w820nbplusform.ui" line="179"/>
+        <location filename="w820nbplusform.ui" line="249"/>
         <source>Ambient Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>环境声</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="143"/>
+        <location filename="w820nbplusform.ui" line="227"/>
         <source>Control Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>操控设置</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="174"/>
+        <location filename="w820nbplusform.ui" line="258"/>
         <source>Please select at least 2 items</source>
-        <translation type="unfinished"></translation>
+        <translation>请选择至少2项</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="187"/>
+        <location filename="w820nbplusform.ui" line="271"/>
         <source>Sound Effect</source>
-        <translation type="unfinished"></translation>
+        <translation>音效</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="200"/>
+        <location filename="w820nbplusform.ui" line="284"/>
         <source>Pop</source>
-        <translation type="unfinished"></translation>
+        <translation>流行</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="207"/>
+        <location filename="w820nbplusform.ui" line="291"/>
         <source>Classical</source>
-        <translation type="unfinished"></translation>
+        <translation>古典</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="214"/>
+        <location filename="w820nbplusform.ui" line="298"/>
         <source>Rock</source>
-        <translation type="unfinished"></translation>
+        <translation>摇滚</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="224"/>
+        <location filename="w820nbplusform.ui" line="308"/>
         <source>Prompt Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>耳机提示音量</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="269"/>
+        <location filename="w820nbplusform.ui" line="353"/>
         <source>Shutdown timer</source>
-        <translation type="unfinished"></translation>
+        <translation>定时关机</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="307"/>
+        <location filename="w820nbplusform.ui" line="391"/>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation>分钟</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="324"/>
+        <location filename="w820nbplusform.ui" line="408"/>
         <source>LDAC</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="332"/>
+        <location filename="w820nbplusform.ui" line="416"/>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="339"/>
+        <location filename="w820nbplusform.ui" line="423"/>
         <source>44.1k/48k</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="346"/>
+        <location filename="w820nbplusform.ui" line="430"/>
         <source>96k</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="355"/>
+        <location filename="w820nbplusform.ui" line="439"/>
         <source>Takes effect after re-pairing</source>
-        <translation type="unfinished"></translation>
+        <translation>重新配对后生效</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="368"/>
+        <location filename="w820nbplusform.ui" line="452"/>
         <source>Game Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>游戏模式</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="375"/>
+        <location filename="w820nbplusform.ui" line="459"/>
         <source>Poweroff</source>
-        <translation type="unfinished"></translation>
+        <translation>关机</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="382"/>
+        <location filename="w820nbplusform.ui" line="466"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="389"/>
+        <location filename="w820nbplusform.ui" line="473"/>
         <source>Re-pair</source>
-        <translation type="unfinished"></translation>
+        <translation>重新配对</translation>
     </message>
     <message>
-        <location filename="w820nbplusform.ui" line="396"/>
+        <location filename="w820nbplusform.ui" line="480"/>
         <source>Factory Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>恢复出厂设置</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="487"/>
+        <source>Play Control</source>
+        <translation>播放控制</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="493"/>
+        <source>Vol+</source>
+        <translation>音量+</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="500"/>
+        <source>Vol-</source>
+        <translation>音量-</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="507"/>
+        <source>Play</source>
+        <translation>播放</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="514"/>
+        <source>Pause</source>
+        <translation>暂停</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="521"/>
+        <source>Prev</source>
+        <translation>上一曲</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="528"/>
+        <source>Next</source>
+        <translation>下一曲</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="538"/>
+        <source>Send Command</source>
+        <translation>发送命令</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="544"/>
+        <source>command(Hex)</source>
+        <translation>命令(16进制)</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="551"/>
+        <source>Raw</source>
+        <translation>原始命令</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.ui" line="558"/>
+        <source>Send</source>
+        <translation>发送</translation>
     </message>
 </context>
 </TS>

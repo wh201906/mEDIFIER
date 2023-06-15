@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<manifest package="priv.wh201906.medifier.qt" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="V0.0.2" android:versionCode="2" android:installLocation="auto">
+<manifest package="priv.wh201906.medifier.qt" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="v0.0.2" android:versionCode="2" android:installLocation="auto">
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
-    <!-- %%INSERT_PERMISSIONS -->
+
 
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
          Remove the comment if you do not require these default features. -->
@@ -73,5 +73,12 @@
     <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
 
     </application>
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
 </manifest>
