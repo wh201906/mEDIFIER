@@ -18,7 +18,8 @@ SOURCES += \
     comm.cpp \
     commrfcomm.cpp \
     deviceform.cpp \
-    w820nbplusform.cpp \
+    basedevice.cpp \
+    w820nbplus.cpp \
     winbthelper.cpp
 
 HEADERS += \
@@ -27,13 +28,14 @@ HEADERS += \
     comm.h \
     commrfcomm.h \
     deviceform.h \
-    w820nbplusform.h \
+    basedevice.h \
+    w820nbplus.h \
     winbthelper.h
 
 FORMS += \
     mainwindow.ui \
     deviceform.ui \
-    w820nbplusform.ui
+    basedevice.ui
 
 TRANSLATIONS += \
     mEDIFIER_zh_CN.ts

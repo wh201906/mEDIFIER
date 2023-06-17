@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "commrfcomm.h"
 #include "commble.h"
+#include "w820nbplus.h"
 
 #include <QDebug>
 #include <QScroller>
@@ -19,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     m_deviceForm = new DeviceForm;
-    m_w820p = new W820NBPlusForm;
+    m_w820p = new W820NBPlus;
     ui->tabWidget->setTabText(0, m_w820p->windowTitle());
     ui->tabWidget->insertTab(0, m_deviceForm, tr("Device"));
     ui->scrollAreaWidgetContents->layout()->addWidget(m_w820p);
@@ -57,12 +58,12 @@ void MainWindow::connectToDevice(const QString& address, bool isBLE)
         m_comm = new CommRFCOMM;
 
     connect(m_comm, &Comm::stateChanged, this, &MainWindow::onCommStateChanged);
-    connect(m_w820p, QOverload<const QByteArray&, bool>::of(&W820NBPlusForm::sendCommand), m_comm, QOverload<const QByteArray&, bool>::of(&Comm::sendCommand));
-    connect(m_w820p, QOverload<const char*, bool>::of(&W820NBPlusForm::sendCommand), m_comm, QOverload<const char*, bool>::of(&Comm::sendCommand));
-    connect(m_comm, &Comm::newData, m_w820p, &W820NBPlusForm::processData);
-    connect(this, &MainWindow::readSettings, m_w820p, &W820NBPlusForm::readSettings);
+    connect(m_w820p, QOverload<const QByteArray&, bool>::of(&BaseDevice::sendCommand), m_comm, QOverload<const QByteArray&, bool>::of(&Comm::sendCommand));
+    connect(m_w820p, QOverload<const char*, bool>::of(&BaseDevice::sendCommand), m_comm, QOverload<const char*, bool>::of(&Comm::sendCommand));
+    connect(m_comm, &Comm::newData, m_w820p, &BaseDevice::processData);
+    connect(this, &MainWindow::readSettings, m_w820p, &BaseDevice::readSettings);
     connect(m_comm, &Comm::showMessage, this, &MainWindow::showMessage);
-    connect(m_w820p, &W820NBPlusForm::showMessage, this, &MainWindow::showMessage);
+    connect(m_w820p, &BaseDevice::showMessage, this, &MainWindow::showMessage);
     m_comm->open(address);
 }
 

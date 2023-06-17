@@ -5,7 +5,7 @@
 
 #include "deviceform.h"
 #include "comm.h"
-#include "w820nbplusform.h"
+#include "basedevice.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -31,7 +31,7 @@ private:
     DeviceForm* m_deviceForm = nullptr;
     Comm* m_comm = nullptr;
     bool m_connected = false;
-    W820NBPlusForm* m_w820p = nullptr;
+    BaseDevice* m_w820p = nullptr;
 private slots:
     void connectToDevice(const QString &address, bool isBLE);
     void disconnectDevice();

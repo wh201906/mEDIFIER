@@ -1,33 +1,31 @@
-#ifndef W820NBPLUSFORM_H
-#define W820NBPLUSFORM_H
+#ifndef BASEDEVICE_H
+#define BASEDEVICE_H
 
 #include <QWidget>
 
 namespace Ui
 {
-class W820NBPlusForm;
+class BaseDevice;
 }
 
-class W820NBPlusForm : public QWidget
+class BaseDevice : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit W820NBPlusForm(QWidget *parent = nullptr);
-    ~W820NBPlusForm();
+    explicit BaseDevice(QWidget *parent = nullptr);
+    ~BaseDevice();
 
 public slots:
     void processData(const QByteArray &data);
     void readSettings();
-private:
-    Ui::W820NBPlusForm *ui;
-    int m_maxNameLength = 30;
+protected:
+    Ui::BaseDevice *ui;
+    // max length can be 24, 29, 30 or 35
+    // the default length is 24
+    int m_maxNameLength = 24;
 
-signals:
-    void sendCommand(const QByteArray& cmd, bool isRaw = false);
-    void sendCommand(const char* hexCmd, bool isRaw = false);
-    void showMessage(const QString& msg);
-private slots:
+protected slots:
     void onBtnInNoiseGroupClicked();
     void onBtnInSoundEffectGroupClicked();
     void on_gameModeBox_clicked();
@@ -58,6 +56,11 @@ private slots:
     void on_PCVolDownButton_clicked();
     void on_PCPrevButton_clicked();
     void on_PCNextButton_clicked();
+
+signals:
+    void sendCommand(const QByteArray& cmd, bool isRaw = false);
+    void sendCommand(const char* hexCmd, bool isRaw = false);
+    void showMessage(const QString& msg);
 };
 
-#endif // W820NBPLUSFORM_H
+#endif // BASEDEVICE_H

@@ -1,41 +1,41 @@
-#include "w820nbplusform.h"
-#include "ui_w820nbplusform.h"
+#include "basedevice.h"
+#include "ui_basedevice.h"
 
 #include <QDebug>
 #include <QTimer>
 
-W820NBPlusForm::W820NBPlusForm(QWidget *parent) :
+BaseDevice::BaseDevice(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::W820NBPlusForm)
+    ui(new Ui::BaseDevice)
 {
     ui->setupUi(this);
 
     ui->nameEdit->setMaxLength(m_maxNameLength);
 
-    connect(ui->noiseNormalButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInNoiseGroupClicked);
-    connect(ui->noiseReductionButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInNoiseGroupClicked);
-    connect(ui->noiseAmbientSoundButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInNoiseGroupClicked);
+    connect(ui->noiseNormalButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInNoiseGroupClicked);
+    connect(ui->noiseReductionButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInNoiseGroupClicked);
+    connect(ui->noiseAmbientSoundButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInNoiseGroupClicked);
 
-    connect(ui->SENormalButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInSoundEffectGroupClicked);
-    connect(ui->SEPopButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInSoundEffectGroupClicked);
-    connect(ui->SEClassicalButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInSoundEffectGroupClicked);
-    connect(ui->SERockButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInSoundEffectGroupClicked);
+    connect(ui->SENormalButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInSoundEffectGroupClicked);
+    connect(ui->SEPopButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInSoundEffectGroupClicked);
+    connect(ui->SEClassicalButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInSoundEffectGroupClicked);
+    connect(ui->SERockButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInSoundEffectGroupClicked);
 
-    connect(ui->CSNormalBox, &QCheckBox::clicked, this, &W820NBPlusForm::onCheckBoxInControlSettingsGroupClicked);
-    connect(ui->CSNoiseReductionBox, &QCheckBox::clicked, this, &W820NBPlusForm::onCheckBoxInControlSettingsGroupClicked);
-    connect(ui->CSAmbientSoundBox, &QCheckBox::clicked, this, &W820NBPlusForm::onCheckBoxInControlSettingsGroupClicked);
+    connect(ui->CSNormalBox, &QCheckBox::clicked, this, &BaseDevice::onCheckBoxInControlSettingsGroupClicked);
+    connect(ui->CSNoiseReductionBox, &QCheckBox::clicked, this, &BaseDevice::onCheckBoxInControlSettingsGroupClicked);
+    connect(ui->CSAmbientSoundBox, &QCheckBox::clicked, this, &BaseDevice::onCheckBoxInControlSettingsGroupClicked);
 
-    connect(ui->LDACOFFButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInLDACGroupClicked);
-    connect(ui->LDAC48kButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInLDACGroupClicked);
-    connect(ui->LDAC96kButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInLDACGroupClicked);
+    connect(ui->LDACOFFButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInLDACGroupClicked);
+    connect(ui->LDAC48kButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInLDACGroupClicked);
+    connect(ui->LDAC96kButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInLDACGroupClicked);
 }
 
-W820NBPlusForm::~W820NBPlusForm()
+BaseDevice::~BaseDevice()
 {
     delete ui;
 }
 
-void W820NBPlusForm::onBtnInNoiseGroupClicked()
+void BaseDevice::onBtnInNoiseGroupClicked()
 {
     if(ui->noiseNormalButton->isChecked())
         emit sendCommand("C101");
@@ -47,7 +47,7 @@ void W820NBPlusForm::onBtnInNoiseGroupClicked()
 
 
 
-void W820NBPlusForm::onBtnInSoundEffectGroupClicked()
+void BaseDevice::onBtnInSoundEffectGroupClicked()
 {
     if(ui->SENormalButton->isChecked())
         emit sendCommand("C400");
@@ -59,7 +59,7 @@ void W820NBPlusForm::onBtnInSoundEffectGroupClicked()
         emit sendCommand("C403");
 }
 
-void W820NBPlusForm::onCheckBoxInControlSettingsGroupClicked()
+void BaseDevice::onCheckBoxInControlSettingsGroupClicked()
 {
     QByteArray cmd = "\xF1\x0A";
     char val = 0;
@@ -74,7 +74,7 @@ void W820NBPlusForm::onCheckBoxInControlSettingsGroupClicked()
     emit sendCommand(cmd);
 }
 
-void W820NBPlusForm::onBtnInLDACGroupClicked()
+void BaseDevice::onBtnInLDACGroupClicked()
 {
     if(ui->LDACOFFButton->isChecked())
         emit sendCommand("4900");
@@ -84,7 +84,7 @@ void W820NBPlusForm::onBtnInLDACGroupClicked()
         emit sendCommand("4902");
 }
 
-void W820NBPlusForm::on_gameModeBox_clicked()
+void BaseDevice::on_gameModeBox_clicked()
 {
     if(ui->gameModeBox->isChecked())
         emit sendCommand("0901");
@@ -93,7 +93,7 @@ void W820NBPlusForm::on_gameModeBox_clicked()
 }
 
 
-void W820NBPlusForm::on_ASSlider_valueChanged(int value)
+void BaseDevice::on_ASSlider_valueChanged(int value)
 {
     ui->ASBox->blockSignals(true);
     ui->ASBox->setValue(value);
@@ -101,7 +101,7 @@ void W820NBPlusForm::on_ASSlider_valueChanged(int value)
 }
 
 
-void W820NBPlusForm::on_ASBox_valueChanged(int arg1)
+void BaseDevice::on_ASBox_valueChanged(int arg1)
 {
     ui->ASSlider->blockSignals(true);
     ui->ASSlider->setValue(arg1);
@@ -109,7 +109,7 @@ void W820NBPlusForm::on_ASBox_valueChanged(int arg1)
 }
 
 
-void W820NBPlusForm::on_ASSetButton_clicked()
+void BaseDevice::on_ASSetButton_clicked()
 {
     QByteArray cmd = "\xC1\x03";
     cmd += (char)(6 + ui->ASBox->value());
@@ -119,7 +119,7 @@ void W820NBPlusForm::on_ASSetButton_clicked()
 }
 
 
-void W820NBPlusForm::on_PVSlider_valueChanged(int value)
+void BaseDevice::on_PVSlider_valueChanged(int value)
 {
     ui->PVBox->blockSignals(true);
     ui->PVBox->setValue(value);
@@ -127,7 +127,7 @@ void W820NBPlusForm::on_PVSlider_valueChanged(int value)
 }
 
 
-void W820NBPlusForm::on_PVBox_valueChanged(int arg1)
+void BaseDevice::on_PVBox_valueChanged(int arg1)
 {
     ui->PVSlider->blockSignals(true);
     ui->PVSlider->setValue(arg1);
@@ -135,7 +135,7 @@ void W820NBPlusForm::on_PVBox_valueChanged(int arg1)
 }
 
 
-void W820NBPlusForm::on_PVSetButton_clicked()
+void BaseDevice::on_PVSetButton_clicked()
 {
     QByteArray cmd = "\x06";
     cmd += (char)(ui->PVBox->value());
@@ -143,14 +143,14 @@ void W820NBPlusForm::on_PVSetButton_clicked()
 }
 
 
-void W820NBPlusForm::on_shutdownTimerGroup_clicked()
+void BaseDevice::on_shutdownTimerGroup_clicked()
 {
     if(!ui->shutdownTimerGroup->isChecked())
         emit sendCommand("D2");
 }
 
 
-void W820NBPlusForm::on_STSlider_valueChanged(int value)
+void BaseDevice::on_STSlider_valueChanged(int value)
 {
     ui->STBox->blockSignals(true);
     ui->STBox->setValue(value);
@@ -158,7 +158,7 @@ void W820NBPlusForm::on_STSlider_valueChanged(int value)
 }
 
 
-void W820NBPlusForm::on_STBox_valueChanged(int arg1)
+void BaseDevice::on_STBox_valueChanged(int arg1)
 {
     ui->STSlider->blockSignals(true);
     ui->STSlider->setValue(arg1);
@@ -166,7 +166,7 @@ void W820NBPlusForm::on_STBox_valueChanged(int arg1)
 }
 
 
-void W820NBPlusForm::on_STSetButton_clicked()
+void BaseDevice::on_STSetButton_clicked()
 {
     QByteArray cmd = "\xD1\x00";
     cmd += (char)(ui->STBox->value());
@@ -174,38 +174,38 @@ void W820NBPlusForm::on_STSetButton_clicked()
 }
 
 
-void W820NBPlusForm::on_poweroffButton_clicked()
+void BaseDevice::on_poweroffButton_clicked()
 {
     emit sendCommand("CE");
 }
 
 
-void W820NBPlusForm::on_disconenctButton_clicked()
+void BaseDevice::on_disconenctButton_clicked()
 {
     emit sendCommand("CD");
 }
 
 
-void W820NBPlusForm::on_re_pairButton_clicked()
+void BaseDevice::on_re_pairButton_clicked()
 {
     emit sendCommand("CF");
 }
 
 
-void W820NBPlusForm::on_resetButton_clicked()
+void BaseDevice::on_resetButton_clicked()
 {
     emit sendCommand("07");
 }
 
 
-void W820NBPlusForm::on_nameSetButton_clicked()
+void BaseDevice::on_nameSetButton_clicked()
 {
     QString name = ui->nameEdit->text();
     if(name.isEmpty())
         return;
     QByteArray nameBytes = name.toUtf8();
     // max length can be 24, 29, 30 or 35
-    // the max length of W820NB Plus is 30(defined in w820nbplusform.h)
+    // the default length is 24(defined in basedevice.h)
     if(nameBytes.length() > m_maxNameLength)
     {
         emit showMessage(tr("The name is too long"));
@@ -216,7 +216,7 @@ void W820NBPlusForm::on_nameSetButton_clicked()
     emit sendCommand(cmd);
 }
 
-void W820NBPlusForm::processData(const QByteArray& data)
+void BaseDevice::processData(const QByteArray& data)
 {
     const char head = data[0];
     const int len = (int)data[1];
@@ -303,7 +303,7 @@ void W820NBPlusForm::processData(const QByteArray& data)
     }
 }
 
-void W820NBPlusForm::readSettings()
+void BaseDevice::readSettings()
 {
     const int interval = 150;
     int i = 0;
@@ -331,61 +331,61 @@ void W820NBPlusForm::readSettings()
     QTimer::singleShot(i, [ = ] {emit sendCommand("D3");});
 }
 
-void W820NBPlusForm::on_batteryGetButton_clicked()
+void BaseDevice::on_batteryGetButton_clicked()
 {
     emit sendCommand("D0");
 }
 
 
-void W820NBPlusForm::on_MACGetButton_clicked()
+void BaseDevice::on_MACGetButton_clicked()
 {
     emit sendCommand("C8");
 }
 
 
-void W820NBPlusForm::on_firmwareGetButton_clicked()
+void BaseDevice::on_firmwareGetButton_clicked()
 {
     emit sendCommand("C6");
 }
 
 
-void W820NBPlusForm::on_cmdSentButton_clicked()
+void BaseDevice::on_cmdSentButton_clicked()
 {
     emit sendCommand(QByteArray::fromHex(ui->cmdEdit->text().toLatin1()), ui->cmdRawBox->isChecked());
 }
 
 
-void W820NBPlusForm::on_PCPlayButton_clicked()
+void BaseDevice::on_PCPlayButton_clicked()
 {
     emit sendCommand("C200");
 }
 
 
-void W820NBPlusForm::on_PCPauseButton_clicked()
+void BaseDevice::on_PCPauseButton_clicked()
 {
     emit sendCommand("C201");
 }
 
 
-void W820NBPlusForm::on_PCVolUpButton_clicked()
+void BaseDevice::on_PCVolUpButton_clicked()
 {
     emit sendCommand("C202");
 }
 
 
-void W820NBPlusForm::on_PCVolDownButton_clicked()
+void BaseDevice::on_PCVolDownButton_clicked()
 {
     emit sendCommand("C203");
 }
 
 
-void W820NBPlusForm::on_PCPrevButton_clicked()
+void BaseDevice::on_PCPrevButton_clicked()
 {
     emit sendCommand("C205");
 }
 
 
-void W820NBPlusForm::on_PCNextButton_clicked()
+void BaseDevice::on_PCNextButton_clicked()
 {
     emit sendCommand("C204");
 }
