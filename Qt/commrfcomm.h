@@ -18,7 +18,7 @@ private slots:
     void onStateChanged();
 private:
     QBluetoothSocket* m_socket = nullptr;
-    QBluetoothUuid m_serviceUUID = QBluetoothUuid(QStringLiteral("EDF00000-EDFE-DFED-FEDF-EDFEDFEDFEDF"));
+    const QBluetoothUuid m_serviceUUID = QBluetoothUuid(QStringLiteral("EDF00000-EDFE-DFED-FEDF-EDFEDFEDFEDF"));
 };
 
 #endif // COMMRFCOMM_H

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "commrfcomm.h"
+#include "commble.h"
 
 #include <QDebug>
 #include <QScroller>
@@ -50,8 +51,7 @@ void MainWindow::connectToDevice(const QString& address, bool isBLE)
     }
     if(isBLE)
     {
-        ;
-//        m_comm = new CommBLE;
+        m_comm = new CommBLE;
     }
     else
         m_comm = new CommRFCOMM;
