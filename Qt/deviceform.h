@@ -37,6 +37,7 @@ private:
     bool m_isCurrDiscoveryMethodBLE = false;
     QStringList m_shownDevices;
 #ifdef Q_OS_ANDROID
+    bool getPermission(const QString& permission);
     void getBondedTarget(bool isBLE);
 #endif
 signals:

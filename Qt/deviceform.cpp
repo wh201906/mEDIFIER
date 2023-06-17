@@ -146,28 +146,50 @@ void DeviceForm::on_searchStopButton_clicked()
 }
 
 #ifdef Q_OS_ANDROID
+bool DeviceForm::getPermission(const QString& permission)
+{
+    QtAndroid::PermissionResult result = QtAndroid::checkPermission(permission);
+    if(result == QtAndroid::PermissionResult::Denied)
+    {
+        QtAndroid::requestPermissionsSync(QStringList() << permission);
+        result = QtAndroid::checkPermission(permission);
+        if(result == QtAndroid::PermissionResult::Denied)
+            return false;
+    }
+    return true;
+}
+
 void DeviceForm::getBondedTarget(bool isBLE)
 {
-    QAndroidJniEnvironment env;
-    QtAndroid::PermissionResult r = QtAndroid::checkPermission("android.permission.ACCESS_FINE_LOCATION");
-    if(r == QtAndroid::PermissionResult::Denied)
+    QAndroidJniEnvironment androidEnv;
+    QStringList permissionList =
     {
-        QtAndroid::requestPermissionsSync(QStringList() << "android.permission.ACCESS_FINE_LOCATION");
-        r = QtAndroid::checkPermission("android.permission.ACCESS_FINE_LOCATION");
-        if(r == QtAndroid::PermissionResult::Denied)
-        {
-            qDebug() << "failed to request";
-        }
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.BLUETOOTH_ADMIN"
+    };
+    if(QtAndroid::androidSdkVersion() >= 31)
+    {
+        permissionList += "android.permission.BLUETOOTH_SCAN";
+        permissionList += "android.permission.BLUETOOTH_CONNECT";
     }
-    qDebug() << "has permission";
-    QAndroidJniObject array = QtAndroid::androidActivity().callObjectMethod("getBondedDevices", "(Z)[Ljava/lang/String;", isBLE);
-    int arraylen = env->GetArrayLength(array.object<jarray>());
-    qDebug() << "arraylen:" << arraylen;
-    QTableWidget* deviceTable = ui->deviceTableWidget;
-    deviceTable->setRowCount(arraylen);
-    for(int i = 0; i < arraylen; i++)
+    else
     {
-        QString info = QAndroidJniObject::fromLocalRef(env->GetObjectArrayElement(array.object<jobjectArray>(), i)).toString();
+        permissionList += "android.permission.BLUETOOTH";
+    }
+    for(const QString& permission : permissionList)
+    {
+        if(!getPermission(permission))
+            qDebug() << "Failed to request permission" << permission;
+    }
+
+    QAndroidJniObject array = QtAndroid::androidActivity().callObjectMethod("getBondedDevices", "(Z)[Ljava/lang/String;", isBLE);
+    int arrayLen = androidEnv->GetArrayLength(array.object<jarray>());
+    qDebug() << "arrayLen:" << arrayLen;
+    QTableWidget* deviceTable = ui->deviceTableWidget;
+    deviceTable->setRowCount(arrayLen);
+    for(int i = 0; i < arrayLen; i++)
+    {
+        QString info = QAndroidJniObject::fromLocalRef(androidEnv->GetObjectArrayElement(array.object<jobjectArray>(), i)).toString();
         QString address = info.left(info.indexOf(' '));
         QString name = info.right(info.length() - info.indexOf(' ') - 1);
         qDebug() << address << name;
