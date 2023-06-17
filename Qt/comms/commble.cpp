@@ -149,6 +149,10 @@ void CommBLE::onDataArrived(const QLowEnergyCharacteristic &characteristic, cons
         qDebug() << "received:" << data.toHex();
         emit newData(data);
     }
+    else
+    {
+        qDebug() << "received unexpected:" << newValue.toHex();
+    }
 }
 
 qint64 CommBLE::write(const QByteArray &data)

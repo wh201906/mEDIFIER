@@ -12,30 +12,32 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    commble.cpp \
     main.cpp \
     mainwindow.cpp \
-    comm.cpp \
-    commrfcomm.cpp \
+    comms/comm.cpp \
+    comms/commrfcomm.cpp \
+    comms/commble.cpp \
+    comms/winbthelper.cpp \
     deviceform.cpp \
-    basedevice.cpp \
-    w820nbplus.cpp \
-    winbthelper.cpp
+    devices/basedevice.cpp \
+    devices/w200btplus.cpp \
+    devices/w820nbplus.cpp
 
 HEADERS += \
-    commble.h \
     mainwindow.h \
-    comm.h \
-    commrfcomm.h \
+    comms/comm.h \
+    comms/commrfcomm.h \
+    comms/commble.h \
+    comms/winbthelper.h \
     deviceform.h \
-    basedevice.h \
-    w820nbplus.h \
-    winbthelper.h
+    devices/basedevice.h \
+    devices/w200btplus.h \
+    devices/w820nbplus.h
 
 FORMS += \
     mainwindow.ui \
     deviceform.ui \
-    basedevice.ui
+    devices/basedevice.ui
 
 TRANSLATIONS += \
     mEDIFIER_zh_CN.ts
@@ -57,5 +59,5 @@ VERSION = 0.0.3
 # Expose VERSION to the source files.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
-# For bluetoothapis.h
+# For bluetoothapis.h on Windows, with MinGW
 win32: LIBS += -lBthprops

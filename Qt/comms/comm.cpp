@@ -25,12 +25,17 @@ bool Comm::sendCommand(const char *hexCmd, bool isRaw)
 
 void Comm::onReadyRead()
 {
+    QByteArray rawData = qobject_cast<QIODevice*>(sender())->readAll();
     // checksum is removed there.
-    QByteArray data = checkValidity(qobject_cast<QIODevice*>(sender())->readAll());
+    QByteArray data = checkValidity(rawData);
     if(!data.isEmpty())
     {
         qDebug() << "received:" << data.toHex();
         emit newData(data);
+    }
+    else
+    {
+        qDebug() << "received unexpected:" << rawData.toHex();
     }
 }
 

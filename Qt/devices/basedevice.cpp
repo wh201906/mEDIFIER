@@ -168,7 +168,9 @@ void BaseDevice::on_STBox_valueChanged(int arg1)
 
 void BaseDevice::on_STSetButton_clicked()
 {
-    QByteArray cmd = "\xD1\x00";
+    // Warning:
+    // This contains '\0', so the length must be specified
+    QByteArray cmd = QByteArray("\xD1\x00", 2);
     cmd += (char)(ui->STBox->value());
     emit sendCommand(cmd);
 }
@@ -256,6 +258,10 @@ void BaseDevice::processData(const QByteArray& data)
             {
                 ui->shutdownTimerGroup->setChecked(ch != '\x00');
             }
+            else if(cmd == '\xD7')
+            {
+                ui->autoPoweroffBox->setChecked(ch == '\x01');
+            }
         }
         else if(len > 2)
         {
@@ -292,7 +298,7 @@ void BaseDevice::processData(const QByteArray& data)
             else if(cmd == '\xD3' && len == 3)
             {
                 int shutdownTimeout = data[4];
-                ui->shutdownTimerGroup->setChecked(false);
+                ui->shutdownTimerGroup->setChecked(true);
                 ui->STBox->setValue(shutdownTimeout);
             }
         }
@@ -314,21 +320,51 @@ void BaseDevice::readSettings()
     i += interval;
     QTimer::singleShot(i, [ = ] {on_firmwareGetButton_clicked();});
     i += interval;
-    QTimer::singleShot(i, [ = ] {emit sendCommand("CC");});
-    i += interval;
-    QTimer::singleShot(i, [ = ] {emit sendCommand("C9");});
-    i += interval;
-    QTimer::singleShot(i, [ = ] {emit sendCommand("D5");});
-    i += interval;
-    QTimer::singleShot(i, [ = ] {emit sendCommand("08");});
-    i += interval;
-    QTimer::singleShot(i, [ = ] {emit sendCommand("F00A");});
-    i += interval;
-    QTimer::singleShot(i, [ = ] {emit sendCommand("48");});
-    i += interval;
-    QTimer::singleShot(i, [ = ] {emit sendCommand("05");});
-    i += interval;
-    QTimer::singleShot(i, [ = ] {emit sendCommand("D3");});
+    if(ui->ambientSoundGroup->isVisible())
+    {
+        QTimer::singleShot(i, [ = ] {emit sendCommand("CC");});
+        i += interval;
+    }
+    if(ui->nameGroup->isVisible())
+    {
+        QTimer::singleShot(i, [ = ] {emit sendCommand("C9");});
+        i += interval;
+    }
+    if(ui->soundEffectGroup->isVisible())
+    {
+        QTimer::singleShot(i, [ = ] {emit sendCommand("D5");});
+        i += interval;
+    }
+    if(ui->gameModeBox->isVisible())
+    {
+        QTimer::singleShot(i, [ = ] {emit sendCommand("08");});
+        i += interval;
+    }
+    if(ui->controlSettingsGroup->isVisible())
+    {
+        QTimer::singleShot(i, [ = ] {emit sendCommand("F00A");});
+        i += interval;
+    }
+    if(ui->LDACGroup->isVisible())
+    {
+        QTimer::singleShot(i, [ = ] {emit sendCommand("48");});
+        i += interval;
+    }
+    if(ui->promptVolumeGroup->isVisible())
+    {
+        QTimer::singleShot(i, [ = ] {emit sendCommand("05");});
+        i += interval;
+    }
+    if(ui->shutdownTimerGroup->isVisible())
+    {
+        QTimer::singleShot(i, [ = ] {emit sendCommand("D3");});
+        i += interval;
+    }
+    if(ui->autoPoweroffBox->isVisible())
+    {
+        QTimer::singleShot(i, [ = ] {emit sendCommand("D7");});
+        i += interval;
+    }
 }
 
 void BaseDevice::on_batteryGetButton_clicked()
@@ -388,5 +424,14 @@ void BaseDevice::on_PCPrevButton_clicked()
 void BaseDevice::on_PCNextButton_clicked()
 {
     emit sendCommand("C204");
+}
+
+
+void BaseDevice::on_autoPoweroffBox_clicked()
+{
+    if(ui->autoPoweroffBox->isChecked())
+        emit sendCommand("D601");
+    else
+        emit sendCommand("D600");
 }
 

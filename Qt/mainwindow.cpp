@@ -1,8 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "commrfcomm.h"
-#include "commble.h"
-#include "w820nbplus.h"
+#include "comms/commrfcomm.h"
+#include "comms/commble.h"
+#include "devices/w820nbplus.h"
+#include "devices/w200btplus.h"
 
 #include <QDebug>
 #include <QScroller>

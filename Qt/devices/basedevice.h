@@ -61,6 +61,8 @@ signals:
     void sendCommand(const QByteArray& cmd, bool isRaw = false);
     void sendCommand(const char* hexCmd, bool isRaw = false);
     void showMessage(const QString& msg);
+private slots:
+    void on_autoPoweroffBox_clicked();
 };
 
 #endif // BASEDEVICE_H

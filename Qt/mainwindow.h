@@ -4,8 +4,8 @@
 #include <QMainWindow>
 
 #include "deviceform.h"
-#include "comm.h"
-#include "basedevice.h"
+#include "comms/comm.h"
+#include "devices/basedevice.h"
 
 
 QT_BEGIN_NAMESPACE

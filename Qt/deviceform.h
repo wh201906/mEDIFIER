@@ -6,7 +6,7 @@
 #include <QThread>
 
 #ifdef Q_OS_WIN
-#include "winbthelper.h"
+#include "comms/winbthelper.h"
 #endif
 
 namespace Ui
