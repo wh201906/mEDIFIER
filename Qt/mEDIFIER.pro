@@ -17,14 +17,16 @@ SOURCES += \
     comm.cpp \
     commrfcomm.cpp \
     deviceform.cpp \
-    w820nbplusform.cpp
+    w820nbplusform.cpp \
+    winbthelper.cpp
 
 HEADERS += \
     mainwindow.h \
     comm.h \
     commrfcomm.h \
     deviceform.h \
-    w820nbplusform.h
+    w820nbplusform.h \
+    winbthelper.h
 
 FORMS += \
     mainwindow.ui \
@@ -50,3 +52,6 @@ DISTFILES += \
 VERSION = 0.0.3
 # Expose VERSION to the source files.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+# For bluetoothapis.h
+win32: LIBS += -lBthprops

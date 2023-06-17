@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tabWidget->setTabText(0, m_w820p->windowTitle());
     ui->tabWidget->insertTab(0, m_deviceForm, tr("Device"));
     ui->scrollAreaWidgetContents->layout()->addWidget(m_w820p);
+    ui->tabWidget->setCurrentIndex(0);
 
     connect(m_deviceForm, &DeviceForm::connectTo, this, &MainWindow::connectToDevice);
     connect(m_deviceForm, &DeviceForm::disconnectDevice, this, &MainWindow::disconnectDevice);

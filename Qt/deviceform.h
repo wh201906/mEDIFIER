@@ -3,6 +3,11 @@
 
 #include <QWidget>
 #include <QBluetoothDeviceDiscoveryAgent>
+#include <QThread>
+
+#ifdef Q_OS_WIN
+#include "winbthelper.h"
+#endif
 
 namespace Ui
 {
@@ -36,6 +41,10 @@ private:
     QBluetoothDeviceDiscoveryAgent *m_discoveryAgent = nullptr;
     bool m_isCurrDiscoveryMethodBLE = false;
     QStringList m_shownDevices;
+#ifdef Q_OS_WIN
+    WinBTHelper* m_winBTHelper = nullptr;
+    QThread* m_winBTThread = nullptr;
+#endif
 #ifdef Q_OS_ANDROID
     bool getPermission(const QString& permission);
     void getBondedTarget(bool isBLE);
@@ -43,6 +52,7 @@ private:
 signals:
     void connectTo(const QString& address, bool isBLE);
     void disconnectDevice();
+    void startDiscovery();
 };
 
 #endif // DEVICEFORM_H

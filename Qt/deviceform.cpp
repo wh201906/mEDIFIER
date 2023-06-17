@@ -30,6 +30,15 @@ DeviceForm::DeviceForm(QWidget *parent) :
     m_discoveryAgent = new QBluetoothDeviceDiscoveryAgent();
     connect(m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, &DeviceForm::onDeviceDiscovered);
     connect(m_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished, this, &DeviceForm::onDiscoverFinished);
+#ifdef Q_OS_WIN
+    m_winBTThread = new QThread();
+    m_winBTHelper = new WinBTHelper();
+    connect(this, &DeviceForm::startDiscovery, m_winBTHelper, &WinBTHelper::start);
+    connect(m_winBTHelper, &WinBTHelper::deviceDiscovered, this, &DeviceForm::onDeviceDiscovered);
+    connect(m_winBTHelper, &WinBTHelper::finished, this, &DeviceForm::onDiscoverFinished);
+    m_winBTHelper->moveToThread(m_winBTThread);
+    m_winBTThread->start();
+#endif
 }
 
 DeviceForm::~DeviceForm()
@@ -53,9 +62,16 @@ void DeviceForm::onSearchButtonClicked()
 #ifdef Q_OS_ANDROID
     getBondedTarget(m_isCurrDiscoveryMethodBLE);
 #endif
+#ifdef Q_OS_WIN
+    if(m_isCurrDiscoveryMethodBLE)
+        m_discoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
+    else
+        emit startDiscovery(); // faster
+#else
     m_discoveryAgent->start(m_isCurrDiscoveryMethodBLE ?
                             QBluetoothDeviceDiscoveryAgent::LowEnergyMethod :
                             QBluetoothDeviceDiscoveryAgent::ClassicMethod);
+#endif
     ui->searchRFCOMMButton->setVisible(false);
     ui->searchBLEButton->setVisible(false);
     ui->searchStopButton->setVisible(true);
