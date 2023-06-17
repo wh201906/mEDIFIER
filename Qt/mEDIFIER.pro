@@ -47,6 +47,6 @@ DISTFILES += \
     android/AndroidManifest.xml
 
 # Remember to change version in AndroidManifest.xml
-VERSION = 0.0.2
+VERSION = 0.0.3
 # Expose VERSION to the source files.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"

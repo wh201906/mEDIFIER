@@ -208,7 +208,7 @@ void W820NBPlusForm::on_nameSetButton_clicked()
     // the max length of W820NB Plus is 30(defined in w820nbplusform.h)
     if(nameBytes.length() > m_maxNameLength)
     {
-        emit showMessage(tr("The name is too long."));
+        emit showMessage(tr("The name is too long"));
         return;
     }
     QByteArray cmd = "\xCA";

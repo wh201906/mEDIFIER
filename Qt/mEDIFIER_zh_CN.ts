@@ -59,14 +59,14 @@
     <message>
         <location filename="deviceform.cpp" line="18"/>
         <location filename="deviceform.cpp" line="86"/>
-        <location filename="deviceform.cpp" line="181"/>
+        <location filename="deviceform.cpp" line="203"/>
         <source>RFCOMM</source>
         <translation></translation>
     </message>
     <message>
         <location filename="deviceform.cpp" line="19"/>
         <location filename="deviceform.cpp" line="84"/>
-        <location filename="deviceform.cpp" line="179"/>
+        <location filename="deviceform.cpp" line="201"/>
         <source>BLE</source>
         <translation></translation>
     </message>
@@ -311,6 +311,12 @@
         <location filename="w820nbplusform.ui" line="558"/>
         <source>Send</source>
         <translation>发送</translation>
+    </message>
+    <message>
+        <location filename="w820nbplusform.cpp" line="211"/>
+        <source>The name is too long</source>
+        <oldsource>The name is too long.</oldsource>
+        <translation>设备名过长</translation>
     </message>
 </context>
 </TS>
