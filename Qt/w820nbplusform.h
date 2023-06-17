@@ -21,6 +21,7 @@ public slots:
     void readSettings();
 private:
     Ui::W820NBPlusForm *ui;
+    int m_maxNameLength = 30;
 
 signals:
     void sendCommand(const QByteArray& cmd, bool isRaw = false);

@@ -10,6 +10,8 @@ W820NBPlusForm::W820NBPlusForm(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->nameEdit->setMaxLength(m_maxNameLength);
+
     connect(ui->noiseNormalButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInNoiseGroupClicked);
     connect(ui->noiseReductionButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInNoiseGroupClicked);
     connect(ui->noiseAmbientSoundButton, &QRadioButton::clicked, this, &W820NBPlusForm::onBtnInNoiseGroupClicked);
@@ -201,6 +203,14 @@ void W820NBPlusForm::on_nameSetButton_clicked()
     QString name = ui->nameEdit->text();
     if(name.isEmpty())
         return;
+    QByteArray nameBytes = name.toUtf8();
+    // max length can be 24, 29, 30 or 35
+    // the max length of W820NB Plus is 30(defined in w820nbplusform.h)
+    if(nameBytes.length() > m_maxNameLength)
+    {
+        emit showMessage(tr("The name is too long."));
+        return;
+    }
     QByteArray cmd = "\xCA";
     cmd += name.toUtf8();
     emit sendCommand(cmd);
