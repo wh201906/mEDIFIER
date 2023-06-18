@@ -45,8 +45,6 @@ void BaseDevice::onBtnInNoiseGroupClicked()
         emit sendCommand("C103");
 }
 
-
-
 void BaseDevice::onBtnInSoundEffectGroupClicked()
 {
     if(ui->SENormalButton->isChecked())
@@ -92,7 +90,6 @@ void BaseDevice::on_gameModeBox_clicked()
         emit sendCommand("0900");
 }
 
-
 void BaseDevice::on_ASSlider_valueChanged(int value)
 {
     ui->ASBox->blockSignals(true);
@@ -100,14 +97,12 @@ void BaseDevice::on_ASSlider_valueChanged(int value)
     ui->ASBox->blockSignals(false);
 }
 
-
 void BaseDevice::on_ASBox_valueChanged(int arg1)
 {
     ui->ASSlider->blockSignals(true);
     ui->ASSlider->setValue(arg1);
     ui->ASSlider->blockSignals(false);
 }
-
 
 void BaseDevice::on_ASSetButton_clicked()
 {
@@ -118,14 +113,12 @@ void BaseDevice::on_ASSetButton_clicked()
     ui->noiseAmbientSoundButton->setChecked(true);
 }
 
-
 void BaseDevice::on_PVSlider_valueChanged(int value)
 {
     ui->PVBox->blockSignals(true);
     ui->PVBox->setValue(value);
     ui->PVBox->blockSignals(false);
 }
-
 
 void BaseDevice::on_PVBox_valueChanged(int arg1)
 {
@@ -134,7 +127,6 @@ void BaseDevice::on_PVBox_valueChanged(int arg1)
     ui->PVSlider->blockSignals(false);
 }
 
-
 void BaseDevice::on_PVSetButton_clicked()
 {
     QByteArray cmd = "\x06";
@@ -142,13 +134,11 @@ void BaseDevice::on_PVSetButton_clicked()
     emit sendCommand(cmd);
 }
 
-
 void BaseDevice::on_shutdownTimerGroup_clicked()
 {
     if(!ui->shutdownTimerGroup->isChecked())
         emit sendCommand("D2");
 }
-
 
 void BaseDevice::on_STSlider_valueChanged(int value)
 {
@@ -157,14 +147,12 @@ void BaseDevice::on_STSlider_valueChanged(int value)
     ui->STBox->blockSignals(false);
 }
 
-
 void BaseDevice::on_STBox_valueChanged(int arg1)
 {
     ui->STSlider->blockSignals(true);
     ui->STSlider->setValue(arg1);
     ui->STSlider->blockSignals(false);
 }
-
 
 void BaseDevice::on_STSetButton_clicked()
 {
@@ -175,30 +163,25 @@ void BaseDevice::on_STSetButton_clicked()
     emit sendCommand(cmd);
 }
 
-
 void BaseDevice::on_poweroffButton_clicked()
 {
     emit sendCommand("CE");
 }
-
 
 void BaseDevice::on_disconenctButton_clicked()
 {
     emit sendCommand("CD");
 }
 
-
 void BaseDevice::on_re_pairButton_clicked()
 {
     emit sendCommand("CF");
 }
 
-
 void BaseDevice::on_resetButton_clicked()
 {
     emit sendCommand("07");
 }
-
 
 void BaseDevice::on_nameSetButton_clicked()
 {
@@ -372,60 +355,50 @@ void BaseDevice::on_batteryGetButton_clicked()
     emit sendCommand("D0");
 }
 
-
 void BaseDevice::on_MACGetButton_clicked()
 {
     emit sendCommand("C8");
 }
-
 
 void BaseDevice::on_firmwareGetButton_clicked()
 {
     emit sendCommand("C6");
 }
 
-
 void BaseDevice::on_cmdSentButton_clicked()
 {
     emit sendCommand(QByteArray::fromHex(ui->cmdEdit->text().toLatin1()), ui->cmdRawBox->isChecked());
 }
-
 
 void BaseDevice::on_PCPlayButton_clicked()
 {
     emit sendCommand("C200");
 }
 
-
 void BaseDevice::on_PCPauseButton_clicked()
 {
     emit sendCommand("C201");
 }
-
 
 void BaseDevice::on_PCVolUpButton_clicked()
 {
     emit sendCommand("C202");
 }
 
-
 void BaseDevice::on_PCVolDownButton_clicked()
 {
     emit sendCommand("C203");
 }
-
 
 void BaseDevice::on_PCPrevButton_clicked()
 {
     emit sendCommand("C205");
 }
 
-
 void BaseDevice::on_PCNextButton_clicked()
 {
     emit sendCommand("C204");
 }
-
 
 void BaseDevice::on_autoPoweroffBox_clicked()
 {
@@ -435,3 +408,21 @@ void BaseDevice::on_autoPoweroffBox_clicked()
         emit sendCommand("D600");
 }
 
+bool BaseDevice::setMaxNameLength(int length)
+{
+    if(length <= 0)
+        return false;
+    m_maxNameLength = length;
+    return true;
+}
+
+bool BaseDevice::hideWidget(const QString& widgetName)
+{
+    if(widgetName.isEmpty())
+        return false;
+    QWidget* widget = findChild<QWidget *>(widgetName);
+    if(widget == nullptr)
+        return false;
+    widget->hide();
+    return true;
+}

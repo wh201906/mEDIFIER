@@ -19,9 +19,7 @@ SOURCES += \
     comms/commble.cpp \
     comms/winbthelper.cpp \
     deviceform.cpp \
-    devices/basedevice.cpp \
-    devices/w200btplus.cpp \
-    devices/w820nbplus.cpp
+    devices/basedevice.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -30,9 +28,7 @@ HEADERS += \
     comms/commble.h \
     comms/winbthelper.h \
     deviceform.h \
-    devices/basedevice.h \
-    devices/w200btplus.h \
-    devices/w820nbplus.h
+    devices/basedevice.h
 
 FORMS += \
     mainwindow.ui \
@@ -61,3 +57,6 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # For bluetoothapis.h on Windows, with MinGW
 win32: LIBS += -lBthprops
+
+RESOURCES += \
+    devices/devices.qrc

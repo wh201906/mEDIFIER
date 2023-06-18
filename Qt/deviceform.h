@@ -53,6 +53,7 @@ signals:
     void connectTo(const QString& address, bool isBLE);
     void disconnectDevice();
     void startDiscovery();
+    void showMessage(const QString& msg);
 };
 
 #endif // DEVICEFORM_H

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/devices">
+        <file>deviceinfo.json</file>
+    </qresource>
+</RCC>

@@ -16,6 +16,8 @@ public:
     explicit BaseDevice(QWidget *parent = nullptr);
     ~BaseDevice();
 
+    bool setMaxNameLength(int length);
+    bool hideWidget(const QString &widgetName);
 public slots:
     void processData(const QByteArray &data);
     void readSettings();

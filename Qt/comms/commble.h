@@ -11,7 +11,6 @@ public:
     explicit CommBLE(QObject *parent = nullptr);
     void open(const QString& address) override;
     void close() override;
-public slots:
 protected:
     qint64 write(const QByteArray &data) override;
 private slots:
@@ -24,14 +23,14 @@ private:
     QLowEnergyController* m_Controller = nullptr;
     QList<QBluetoothUuid> m_DiscoveredServices;
     QLowEnergyService* m_RxTxService = nullptr;
-    QBluetoothUuid m_RxUuid;
+    QBluetoothUuid m_RxUUID;
     QLowEnergyCharacteristic m_TxCharacteristic;
-    const QList<QBluetoothUuid> specialRxUuidList =
+    const QList<QBluetoothUuid> specialRxUUIDList =
     {
         QBluetoothUuid(QLatin1String("00001000-0000-1000-8992-00805f9b34fb")),
         QBluetoothUuid(QLatin1String("48090001-1a48-11e9-ab14-d663bd873d93")),
     };
-    const QList<QBluetoothUuid> specialTxUuidList =
+    const QList<QBluetoothUuid> specialTxUUIDList =
     {
         QBluetoothUuid(QLatin1String("00001000-0000-1000-8993-00805f9b34fb")),
         QBluetoothUuid(QLatin1String("48090002-1a48-11e9-ab14-d663bd873d93")),

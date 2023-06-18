@@ -1,8 +1,10 @@
 #include "deviceform.h"
 #include "ui_deviceform.h"
+#include "comms/comm.h"
 
 #include <QDebug>
 #include <QBluetoothUuid>
+#include <QBluetoothLocalDevice>
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #include <QAndroidJniEnvironment>
@@ -48,6 +50,11 @@ DeviceForm::~DeviceForm()
 
 void DeviceForm::onSearchButtonClicked()
 {
+    if(Comm::getLocalAddress().isNull())
+    {
+        emit showMessage(tr("Bluetooth is not available"));
+        return;
+    }
     if(sender() == ui->searchRFCOMMButton)
         m_isCurrDiscoveryMethodBLE = false;
     else if(sender() == ui->searchBLEButton)
@@ -104,7 +111,6 @@ void DeviceForm::onDeviceDiscovered(const QBluetoothDeviceInfo &info)
     deviceTable->setItem(i, 2, typeItem);
     m_shownDevices.append(address);
 
-
     qDebug() << name
              << address
              << info.isValid()
@@ -148,12 +154,10 @@ void DeviceForm::on_connectButton_clicked()
     emit connectTo(ui->deviceAddressEdit->text(), isBLE);
 }
 
-
 void DeviceForm::on_disconnectButton_clicked()
 {
     emit disconnectDevice();
 }
-
 
 void DeviceForm::on_searchStopButton_clicked()
 {
@@ -223,4 +227,3 @@ void DeviceForm::getBondedTarget(bool isBLE)
     }
 }
 #endif
-

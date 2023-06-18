@@ -456,7 +456,7 @@
    <item>
     <widget class="QCheckBox" name="autoPoweroffBox">
      <property name="text">
-      <string>Auto power off if there is no audio input for 30 minutes.</string>
+      <string>Auto power off if there is no audio input for 30 minutes</string>
      </property>
     </widget>
    </item>

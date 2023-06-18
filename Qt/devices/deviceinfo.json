@@ -1,0 +1,27 @@
+{
+    "basedevice":{
+        "Name": "Generic Device",
+        "MaxNameLength": 24,
+        "HiddenFeatures": []
+    },
+    "w820nbdoublegold": {
+        "Name": "W820NB Double Gold",
+        "UniqueServiceUUID": "48097901-1a48-11e9-ab14-d663bd873d93",
+        "MaxNameLength": 30,
+        "HiddenFeatures": [
+            "autoPoweroffBox"
+        ]
+    },
+    "w200btplus": {
+        "Name": "W200BT Plus",
+        "UniqueServiceUUID": "48092801-1a48-11e9-ab14-d663bd873d93",
+        "MaxNameLength": 24,
+        "HiddenFeatures": [
+            "noiseGroup",
+            "ambientSoundGroup",
+            "controlSettingsGroup",
+            "LDACGroup",
+            "gameModeBox"
+        ]
+    }
+}

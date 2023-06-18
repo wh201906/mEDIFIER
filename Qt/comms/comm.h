@@ -2,6 +2,7 @@
 #define COMM_H
 
 #include <QObject>
+#include <QBluetoothAddress>
 
 class Comm : public QObject
 {
@@ -14,6 +15,7 @@ public:
     static QByteArray addChecksum(QByteArray data);
     static QByteArray removeCheckSum(QByteArray data);
     static QByteArray checkValidity(QByteArray data);
+    static QBluetoothAddress getLocalAddress();
 public slots:
     bool sendCommand(const QByteArray& cmd, bool isRaw = false);
     bool sendCommand(const char* hexCmd, bool isRaw = false);
@@ -25,6 +27,7 @@ signals:
     void newData(const QByteArray& data);
     void stateChanged(bool connected);
     void showMessage(const QString& msg);
+    void deviceFeature(const QString& feature, bool isBLE = true);
 };
 
 #endif // COMM_H

@@ -20,8 +20,6 @@ public:
     explicit WinBTHelper(QObject *parent = nullptr);
 public slots:
     void start();
-private:
-
 signals:
     void deviceDiscovered(QBluetoothDeviceInfo info);
     void finished();

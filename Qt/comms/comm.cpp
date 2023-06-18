@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QTimer>
+#include <QBluetoothLocalDevice>
 
 Comm::Comm(QObject *parent)
     : QObject{parent}
@@ -92,4 +93,22 @@ QByteArray Comm::checkValidity(QByteArray data)
         return QByteArray();
     }
     return removeCheckSum(data);
+}
+
+QBluetoothAddress Comm::getLocalAddress()
+{
+    QBluetoothAddress localAddress;
+
+    auto BTAdapterList = QBluetoothLocalDevice::allDevices();
+    for(auto it = BTAdapterList.cbegin(); it != BTAdapterList.cend(); ++it)
+    {
+        qDebug() << "dev:" << it->name() << it->address();
+        QBluetoothLocalDevice dev(it->address());
+        if(dev.isValid() && dev.hostMode() != QBluetoothLocalDevice::HostPoweredOff)
+        {
+            localAddress = it->address();
+            break; // find the first valid one
+        }
+    }
+    return localAddress;
 }

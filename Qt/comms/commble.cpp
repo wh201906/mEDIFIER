@@ -12,21 +12,11 @@ void CommBLE::open(const QString &address)
 {
     if(m_Controller != nullptr)
         m_Controller->deleteLater();
-    QBluetoothAddress localAddress;
 
-    auto BTAdapterList = QBluetoothLocalDevice::allDevices();
-    for(auto it = BTAdapterList.cbegin(); it != BTAdapterList.cend(); ++it)
-    {
-        qDebug() << "dev:" << it->name() << it->address();
-        QBluetoothLocalDevice dev(it->address());
-        if(dev.isValid() && dev.hostMode() != QBluetoothLocalDevice::HostPoweredOff)
-        {
-            localAddress = it->address();
-            break; // find the first valid one
-        }
-    }
+    QBluetoothAddress localAddress = getLocalAddress();
     if(localAddress.isNull())
         return; // invalid
+
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     m_BLEController = new QLowEnergyController(QBluetoothAddress(address), localAddress);
 #else
@@ -43,7 +33,7 @@ void CommBLE::close()
 {
     if(m_RxTxService != nullptr)
     {
-        QLowEnergyDescriptor desc = m_RxTxService->characteristic(m_RxUuid).descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+        QLowEnergyDescriptor desc = m_RxTxService->characteristic(m_RxUUID).descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
         m_RxTxService->writeDescriptor(desc, QByteArray::fromHex("0000"));
         m_RxTxService->deleteLater();
         m_RxTxService = nullptr;
@@ -85,44 +75,45 @@ void CommBLE::onServiceDetailDiscovered(QLowEnergyService::ServiceState newState
         deleteService = true;
         const QList<QLowEnergyCharacteristic> chars = service->characteristics();
         // delete unused service
-        bool isRxUuidValid = false;
-        bool isTxUuidValid = false;
-        QBluetoothUuid TxUuid;
+        bool isRxUUIDValid = false;
+        bool isTxUUIDValid = false;
+        QBluetoothUuid TxUUID;
 
         for(auto it = chars.cbegin(); it != chars.cend(); ++it)
         {
             auto uuid = it->uuid();
-            if(!isRxUuidValid && it->properties().testFlag(QLowEnergyCharacteristic::Notify)
-                    && (specialRxUuidList.contains(uuid) || (uuid.toString().contains("2-1a48-11e9-ab14-d663bd873d93", Qt::CaseInsensitive) && !specialTxUuidList.contains(uuid))))
+            if(!isRxUUIDValid && it->properties().testFlag(QLowEnergyCharacteristic::Notify)
+                    && (specialRxUUIDList.contains(uuid) || (uuid.toString().contains("2-1a48-11e9-ab14-d663bd873d93", Qt::CaseInsensitive) && !specialTxUUIDList.contains(uuid))))
             {
-                isRxUuidValid = true;
-                m_RxUuid = uuid;
+                isRxUUIDValid = true;
+                m_RxUUID = uuid;
                 deleteService = false;
             }
-            if(!isTxUuidValid && it->properties().testFlag(QLowEnergyCharacteristic::Write)
-                    && (specialTxUuidList.contains(uuid) || (uuid.toString().contains("3-1a48-11e9-ab14-d663bd873d93", Qt::CaseInsensitive) && !specialRxUuidList.contains(uuid))))
+            if(!isTxUUIDValid && it->properties().testFlag(QLowEnergyCharacteristic::Write)
+                    && (specialTxUUIDList.contains(uuid) || (uuid.toString().contains("3-1a48-11e9-ab14-d663bd873d93", Qt::CaseInsensitive) && !specialRxUUIDList.contains(uuid))))
             {
-                isTxUuidValid = true;
-                TxUuid = uuid;
+                isTxUUIDValid = true;
+                TxUUID = uuid;
                 deleteService = false;
             }
         }
 
         if(!deleteService)
         {
-            if(isRxUuidValid && isTxUuidValid)
+            if(isRxUUIDValid && isTxUUIDValid)
             {
                 connect(m_RxTxService, &QLowEnergyService::stateChanged, this, &CommBLE::onServiceStateChanged);
                 // Rx
                 connect(m_RxTxService, QOverload<QLowEnergyService::ServiceError>::of(&QLowEnergyService::error), this, &CommBLE::onErrorOccurred);
                 connect(m_RxTxService, &QLowEnergyService::characteristicChanged, this, &CommBLE::onDataArrived);
                 connect(m_RxTxService, &QLowEnergyService::characteristicRead, this, &CommBLE::onDataArrived); // not necessary
-                QLowEnergyDescriptor desc = m_RxTxService->characteristic(m_RxUuid).descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+                QLowEnergyDescriptor desc = m_RxTxService->characteristic(m_RxUUID).descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
                 m_RxTxService->writeDescriptor(desc, QByteArray::fromHex("0100")); // Enable notify
                 // Tx
-                m_TxCharacteristic = m_RxTxService->characteristic(TxUuid);
+                m_TxCharacteristic = m_RxTxService->characteristic(TxUUID);
                 emit stateChanged(true);
                 emit showMessage(tr("Device Connected"));
+                emit deviceFeature(m_RxTxService->serviceUuid().toString());
             }
         }
         else
@@ -131,6 +122,7 @@ void CommBLE::onServiceDetailDiscovered(QLowEnergyService::ServiceState newState
         }
     }
 }
+
 void CommBLE::onErrorOccurred()
 {
     if(sender() == m_Controller)
@@ -157,8 +149,13 @@ void CommBLE::onDataArrived(const QLowEnergyCharacteristic &characteristic, cons
 
 qint64 CommBLE::write(const QByteArray &data)
 {
-    m_RxTxService->writeCharacteristic(m_TxCharacteristic, data);
-    return data.length(); // no feedback
+    if(m_RxTxService != nullptr)
+    {
+        m_RxTxService->writeCharacteristic(m_TxCharacteristic, data);
+        return data.length(); // no feedback
+    }
+    else
+        return -1;
 }
 
 void CommBLE::onServiceStateChanged(QLowEnergyService::ServiceState newState)
