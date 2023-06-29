@@ -68,8 +68,8 @@ QByteArray Comm::removeCheckSum(QByteArray data)
     else
     {
         qDebug() << "checksum error:"
-                 << "expected:" << expected
-                 << "received:" << data;
+                 << "expected:" << expected.toHex()
+                 << "received:" << data.toHex();
         return QByteArray();
     }
 }

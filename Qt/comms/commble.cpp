@@ -1,6 +1,7 @@
 #include "commble.h"
 
 #include <QBluetoothLocalDevice>
+#include <QTimer>
 
 CommBLE::CommBLE(QObject *parent)
     : Comm{parent}
@@ -134,6 +135,8 @@ void CommBLE::onErrorOccurred()
 void CommBLE::onDataArrived(const QLowEnergyCharacteristic &characteristic, const QByteArray &newValue)
 {
     Q_UNUSED(characteristic);
+//    qDebug() << "raw received:" << newValue.toHex();
+
     // checksum is removed there.
     QByteArray data = checkValidity(newValue);
     if(!data.isEmpty())
@@ -151,7 +154,13 @@ qint64 CommBLE::write(const QByteArray &data)
 {
     if(m_RxTxService != nullptr)
     {
-        m_RxTxService->writeCharacteristic(m_TxCharacteristic, data);
+        int t = 0;
+        for(int i = 0; i < data.length(); i += maxPacketLen)
+        {
+            // data.mid() will handle the case where i+maxPacketLen > data.length()
+            QTimer::singleShot(t, [ = ] {m_RxTxService->writeCharacteristic(m_TxCharacteristic, data.mid(i, maxPacketLen));});
+            t += packetDelayMs;
+        }
         return data.length(); // no feedback
     }
     else
@@ -174,3 +183,15 @@ void CommBLE::onServiceStateChanged(QLowEnergyService::ServiceState newState)
         emit showMessage(tr("Device Disconnected"));
     }
 }
+
+const QList<QBluetoothUuid> CommBLE::specialRxUUIDList =
+{
+    QBluetoothUuid(QLatin1String("00001000-0000-1000-8992-00805f9b34fb")),
+    QBluetoothUuid(QLatin1String("48090001-1a48-11e9-ab14-d663bd873d93")),
+};
+
+const QList<QBluetoothUuid> CommBLE::specialTxUUIDList =
+{
+    QBluetoothUuid(QLatin1String("00001000-0000-1000-8993-00805f9b34fb")),
+    QBluetoothUuid(QLatin1String("48090002-1a48-11e9-ab14-d663bd873d93")),
+};
