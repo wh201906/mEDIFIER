@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QTimer>
+#include <QMessageBox>
 
 BaseDevice::BaseDevice(QWidget *parent) :
     QWidget(parent),
@@ -165,22 +166,26 @@ void BaseDevice::on_STSetButton_clicked()
 
 void BaseDevice::on_poweroffButton_clicked()
 {
-    emit sendCommand("CE");
+    if(QMessageBox::question(this, tr("Info"), tr("The device will be powered off\nContinue?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Ok)
+        emit sendCommand("CE");
 }
 
 void BaseDevice::on_disconenctButton_clicked()
 {
-    emit sendCommand("CD");
+    if(QMessageBox::question(this, tr("Info"), tr("The device will be disconnected\nContinue?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Ok)
+        emit sendCommand("CD");
 }
 
 void BaseDevice::on_re_pairButton_clicked()
 {
-    emit sendCommand("CF");
+    if(QMessageBox::question(this, tr("Info"), tr("The device will get into pairing state\nContinue?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Ok)
+        emit sendCommand("CF");
 }
 
 void BaseDevice::on_resetButton_clicked()
 {
-    emit sendCommand("07");
+    if(QMessageBox::warning(this, tr("Info"), tr("The device will be reseted\nContinue?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Ok)
+        emit sendCommand("07");
 }
 
 void BaseDevice::on_nameSetButton_clicked()
