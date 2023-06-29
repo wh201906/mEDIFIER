@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QTimer>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QJsonDocument>
 
 BaseDevice::BaseDevice(QWidget *parent) :
     QWidget(parent),
@@ -12,6 +14,7 @@ BaseDevice::BaseDevice(QWidget *parent) :
     ui->setupUi(this);
 
     ui->nameEdit->setMaxLength(m_maxNameLength);
+    m_isSavingToFile = false;
 
     connect(ui->noiseNormalButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInNoiseGroupClicked);
     connect(ui->noiseReductionButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInNoiseGroupClicked);
@@ -29,6 +32,9 @@ BaseDevice::BaseDevice(QWidget *parent) :
     connect(ui->LDACOFFButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInLDACGroupClicked);
     connect(ui->LDAC48kButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInLDACGroupClicked);
     connect(ui->LDAC96kButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInLDACGroupClicked);
+
+    connect(this, QOverload<const QByteArray&, const QString&, int>::of(&BaseDevice::pushCommand), this, QOverload<const QByteArray&, const QString&, int>::of(&BaseDevice::onCommandPushed));
+    connect(this, QOverload<const char*, const QString&, int>::of(&BaseDevice::pushCommand), this, QOverload<const char*, const QString&, int>::of(&BaseDevice::onCommandPushed));
 }
 
 BaseDevice::~BaseDevice()
@@ -36,26 +42,32 @@ BaseDevice::~BaseDevice()
     delete ui;
 }
 
+void BaseDevice::setDeviceName(const QString &deviceName)
+{
+    m_deviceName = deviceName;
+}
+
 void BaseDevice::onBtnInNoiseGroupClicked()
 {
+    // This affects Ambient Sound
     if(ui->noiseNormalButton->isChecked())
-        emit sendCommand("C101");
+        emit pushCommand("C101", "Noise Reduction", 1);
     else if(ui->noiseReductionButton->isChecked())
-        emit sendCommand("C102");
+        emit pushCommand("C102", "Noise Reduction", 1);
     else if(ui->noiseAmbientSoundButton->isChecked())
-        emit sendCommand("C103");
+        emit pushCommand("C103", "Noise Reduction", 1);
 }
 
 void BaseDevice::onBtnInSoundEffectGroupClicked()
 {
     if(ui->SENormalButton->isChecked())
-        emit sendCommand("C400");
+        emit pushCommand("C400", "Sound Effect");
     else if(ui->SEPopButton->isChecked())
-        emit sendCommand("C401");
+        emit pushCommand("C401", "Sound Effect");
     else if(ui->SEClassicalButton->isChecked())
-        emit sendCommand("C402");
+        emit pushCommand("C402", "Sound Effect");
     else if(ui->SERockButton->isChecked())
-        emit sendCommand("C403");
+        emit pushCommand("C403", "Sound Effect");
 }
 
 void BaseDevice::onCheckBoxInControlSettingsGroupClicked()
@@ -69,26 +81,26 @@ void BaseDevice::onCheckBoxInControlSettingsGroupClicked()
     if(ui->CSAmbientSoundBox->isChecked())
         val += 4;
     cmd += val;
-    qDebug() << cmd;
-    emit sendCommand(cmd);
+    emit pushCommand(cmd, "Control Settings");
 }
 
 void BaseDevice::onBtnInLDACGroupClicked()
 {
+    // This triggers re-pairing, so it has the lowest priority
     if(ui->LDACOFFButton->isChecked())
-        emit sendCommand("4900");
+        emit pushCommand("4900", "LDAC", 2);
     else if(ui->LDAC48kButton->isChecked())
-        emit sendCommand("4901");
+        emit pushCommand("4901", "LDAC", 2);
     else if(ui->LDAC96kButton->isChecked())
-        emit sendCommand("4902");
+        emit pushCommand("4902", "LDAC", 2);
 }
 
 void BaseDevice::on_gameModeBox_clicked()
 {
     if(ui->gameModeBox->isChecked())
-        emit sendCommand("0901");
+        emit pushCommand("0901", "Game Mode");
     else
-        emit sendCommand("0900");
+        emit pushCommand("0900", "Game Mode");
 }
 
 void BaseDevice::on_ASSlider_valueChanged(int value)
@@ -109,7 +121,7 @@ void BaseDevice::on_ASSetButton_clicked()
 {
     QByteArray cmd = "\xC1\x03";
     cmd += (char)(6 + ui->ASBox->value());
-    emit sendCommand(cmd);
+    emit pushCommand(cmd, "Ambient Sound");
     // setting ambient sound volume triggers ambient sound mode
     ui->noiseAmbientSoundButton->setChecked(true);
 }
@@ -132,13 +144,13 @@ void BaseDevice::on_PVSetButton_clicked()
 {
     QByteArray cmd = "\x06";
     cmd += (char)(ui->PVBox->value());
-    emit sendCommand(cmd);
+    emit pushCommand(cmd, "Prompt Volume");
 }
 
 void BaseDevice::on_shutdownTimerGroup_clicked()
 {
     if(!ui->shutdownTimerGroup->isChecked())
-        emit sendCommand("D2");
+        emit pushCommand("D2", "Shutdown Timer Enabled", 1);
 }
 
 void BaseDevice::on_STSlider_valueChanged(int value)
@@ -161,7 +173,7 @@ void BaseDevice::on_STSetButton_clicked()
     // This contains '\0', so the length must be specified
     QByteArray cmd = QByteArray("\xD1\x00", 2);
     cmd += (char)(ui->STBox->value());
-    emit sendCommand(cmd);
+    emit pushCommand(cmd, "Shutdown Timer");
 }
 
 void BaseDevice::on_poweroffButton_clicked()
@@ -203,7 +215,7 @@ void BaseDevice::on_nameSetButton_clicked()
     }
     QByteArray cmd = "\xCA";
     cmd += name.toUtf8();
-    emit sendCommand(cmd);
+    emit pushCommand(cmd, "Name");
 }
 
 void BaseDevice::processData(const QByteArray& data)
@@ -408,9 +420,9 @@ void BaseDevice::on_PCNextButton_clicked()
 void BaseDevice::on_autoPoweroffBox_clicked()
 {
     if(ui->autoPoweroffBox->isChecked())
-        emit sendCommand("D601");
+        emit pushCommand("D601", "Auto Poweroff");
     else
-        emit sendCommand("D600");
+        emit pushCommand("D600", "Auto Poweroff");
 }
 
 bool BaseDevice::setMaxNameLength(int length)
@@ -430,4 +442,137 @@ bool BaseDevice::hideWidget(const QString& widgetName)
         return false;
     widget->hide();
     return true;
+}
+
+void BaseDevice::onCommandPushed(const QByteArray &cmd, const QString &name, int priority)
+{
+    if(m_isSavingToFile)
+    {
+        if(m_cmdInFile == nullptr)
+        {
+            qDebug() << "Warning: m_cmdInFile not initialized";
+            return;
+        }
+        QJsonObject cmdObject;
+        cmdObject.insert("cmd", QString::fromLatin1(cmd.toHex()));
+        if(!name.isEmpty())
+            cmdObject.insert("name", name);
+        if(priority > 0)
+            cmdObject.insert("priority", priority);
+        m_cmdInFile->append(cmdObject);
+    }
+    else
+        emit sendCommand(cmd);
+}
+
+void BaseDevice::onCommandPushed(const char* hexCmd, const QString& name, int priority)
+{
+    onCommandPushed(QByteArray::fromHex(hexCmd), name, priority);
+}
+
+void BaseDevice::on_fileSaveButton_clicked()
+{
+    QString filename = QFileDialog::getSaveFileName(this);
+    if(filename.isEmpty())
+        return;
+
+    m_isSavingToFile = true;
+    m_cmdInFile = new QJsonArray;
+
+    if(ui->soundEffectGroup->isVisible())
+        onBtnInSoundEffectGroupClicked();
+    if(ui->controlSettingsGroup->isVisible())
+        onCheckBoxInControlSettingsGroupClicked();
+    if(ui->LDACGroup->isVisible())
+        onBtnInLDACGroupClicked();
+    if(ui->gameModeBox->isVisible())
+        on_gameModeBox_clicked();
+    if(ui->ambientSoundGroup->isVisible())
+    {
+        onBtnInNoiseGroupClicked();
+        on_ASSetButton_clicked();
+    }
+    if(ui->promptVolumeGroup->isVisible())
+        on_PVSetButton_clicked();
+    if(ui->shutdownTimerGroup->isVisible())
+    {
+        on_shutdownTimerGroup_clicked();
+        on_STSetButton_clicked();
+    }
+    if(ui->nameGroup->isVisible())
+        on_nameSetButton_clicked();
+    if(ui->autoPoweroffBox->isVisible())
+        on_autoPoweroffBox_clicked();
+
+    QJsonObject settingsObj;
+    settingsObj.insert("name", m_deviceName);
+    settingsObj.insert("commands", *m_cmdInFile);
+    qDebug() << settingsObj;
+    QFile settingsFile(filename);
+    // QFile::Truncate is necessary there
+    if(!settingsFile.open(QFile::WriteOnly | QFile::Truncate))
+        QMessageBox::information(this, tr("Error"), tr("Failed to save to") + "\n" + filename);
+    else
+    {
+        settingsFile.write(QJsonDocument(settingsObj).toJson());
+        QMessageBox::information(this, tr("Info"), tr("Saved"));
+    }
+
+    delete(m_cmdInFile);
+    m_cmdInFile = nullptr;
+    m_isSavingToFile = false;
+}
+
+
+void BaseDevice::on_fileWriteDeviceButton_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(this);
+    if(filename.isEmpty())
+        return;
+
+    QFile settingsFile(filename);
+    if(!settingsFile.open(QFile::ReadOnly))
+    {
+        QMessageBox::information(this, tr("Error"), tr("Failed to open") + "\n" + filename);
+        return;
+    }
+
+    QJsonDocument doc = QJsonDocument::fromJson(settingsFile.readAll());
+    if(doc.isNull())
+    {
+        QMessageBox::information(this, tr("Error"), tr("Invalid JSON file"));
+        return;
+    }
+    QJsonObject settingsObj = doc.object();
+    if(settingsObj.isEmpty() || !settingsObj.contains("commands") || !settingsObj["commands"].isArray())
+    {
+        QMessageBox::information(this, tr("Error"), tr("Invalid format"));
+        return;
+    }
+    const QJsonArray cmdInFile = settingsObj["commands"].toArray();
+
+    const int interval = 150;
+    int i = 0;
+    QList<QJsonValue> cmdList[3];
+    for(const auto& cmdItem : cmdInFile)
+    {
+        const QString cmd = cmdItem["cmd"].toString();
+        int priority = cmdItem["priority"].toInt(0);
+        if(cmd.isEmpty())
+            continue;
+        else if(priority < 3)
+            cmdList[priority].append(cmdItem);
+    }
+    for(int priority = 0; priority < 3; priority++)
+    {
+        for(const auto& cmdItem : qAsConst(cmdList[priority]))
+        {
+            const QString cmd = cmdItem["cmd"].toString();
+            const QString name = cmdItem["name"].toString();
+            QTimer::singleShot(i, [ = ] {emit sendCommand(QByteArray::fromHex(cmd.toLatin1()));});
+            i += interval;
+        }
+    }
+    QTimer::singleShot(i, [ = ] {QMessageBox::information(this, tr("Info"), tr("Done"));});
+
 }

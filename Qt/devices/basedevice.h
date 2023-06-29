@@ -2,6 +2,8 @@
 #define BASEDEVICE_H
 
 #include <QWidget>
+#include <QJsonArray>
+#include <QJsonObject>
 
 namespace Ui
 {
@@ -16,6 +18,8 @@ public:
     explicit BaseDevice(QWidget *parent = nullptr);
     ~BaseDevice();
 
+    // this deviceName is the key in deviceinfo.json, not "Name"
+    void setDeviceName(const QString& deviceName);
     bool setMaxNameLength(int length);
     bool hideWidget(const QString &widgetName);
 public slots:
@@ -23,9 +27,12 @@ public slots:
     void readSettings();
 protected:
     Ui::BaseDevice *ui;
+    bool m_isSavingToFile = false;
+    QString m_deviceName;
     // max length can be 24, 29, 30 or 35
     // the default length is 24
     int m_maxNameLength = 24;
+    QJsonArray* m_cmdInFile = nullptr;
 
 protected slots:
     void onBtnInNoiseGroupClicked();
@@ -60,11 +67,20 @@ protected slots:
     void on_PCNextButton_clicked();
 
 signals:
+    // for sending commands
     void sendCommand(const QByteArray& cmd, bool isRaw = false);
     void sendCommand(const char* hexCmd, bool isRaw = false);
+    // for sending/saving commands
+    // commands with highest priority number will be sent at last
+    void pushCommand(const QByteArray& cmd, const QString& name = QString(), int priority = 0);
+    void pushCommand(const char* hexCmd, const QString& name = QString(), int priority = 0);
     void showMessage(const QString& msg);
 private slots:
     void on_autoPoweroffBox_clicked();
+    void on_fileSaveButton_clicked();
+    void on_fileWriteDeviceButton_clicked();
+    void onCommandPushed(const QByteArray& cmd, const QString &name = QString(), int priority = 0);
+    void onCommandPushed(const char *hexCmd, const QString &name = QString(), int priority = 0);
 };
 
 #endif // BASEDEVICE_H

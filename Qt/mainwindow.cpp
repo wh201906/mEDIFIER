@@ -146,6 +146,7 @@ void MainWindow::changeDevice(const QString& deviceName)
         m_device->deleteLater();
     QJsonObject details = m_deviceInfo->value(deviceName).toObject();
     m_device = new BaseDevice;
+    m_device->setDeviceName(deviceName);
     m_device->setWindowTitle(tr(details["Name"].toString().toUtf8()));
     m_device->setMaxNameLength(details["MaxNameLength"].toInt());
     const QVariantList hiddenFeatureList = details["HiddenFeatures"].toArray().toVariantList();

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>1070</height>
+    <height>1200</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -350,7 +350,7 @@
    <item>
     <widget class="QGroupBox" name="shutdownTimerGroup">
      <property name="title">
-      <string>Shutdown timer</string>
+      <string>Shutdown Timer</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -440,6 +440,13 @@
         </property>
         <property name="wordWrap">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Changing this will close &quot;Shutdown Timer&quot;</string>
         </property>
        </widget>
       </item>
@@ -563,6 +570,29 @@
        <widget class="QPushButton" name="cmdSentButton">
         <property name="text">
          <string>Send</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="fileGrp">
+     <property name="title">
+      <string>Settings &lt;-&gt; File</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_13">
+      <item>
+       <widget class="QPushButton" name="fileSaveButton">
+        <property name="text">
+         <string>Save to File</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="fileWriteDeviceButton">
+        <property name="text">
+         <string>Restore to Device</string>
         </property>
        </widget>
       </item>
