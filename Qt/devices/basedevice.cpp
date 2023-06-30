@@ -601,9 +601,11 @@ void BaseDevice::on_connectAudioButton_clicked()
 #ifdef Q_OS_ANDROID
     // Get MAC address for audio
     on_MACGetButton_clicked();
+    int i = 0;
 
     // Disconnect
-    QTimer::singleShot(300, [ = ]
+    i += 300;
+    QTimer::singleShot(i, [ = ]
     {
         if(m_address.isEmpty())
             qDebug() << "Error: m_address is not set";
@@ -612,7 +614,8 @@ void BaseDevice::on_connectAudioButton_clicked()
     });
 
     // Connect Audio
-    QTimer::singleShot(600, [ = ]
+    i += 2500; // must be greater than or equal to 2500ms
+    QTimer::singleShot(i, [ = ]
     {
         if(m_address.isEmpty())
         {

@@ -18,12 +18,14 @@ import java.util.ArrayList;
 public class MainActivity extends QtActivity
 {
     private static final String LOG_TAG = "MainActivity";
+    private ProfileProxyHelper mPPHelper = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         Log.i(LOG_TAG, "qt.mainactivity");
+        mPPHelper = new ProfileProxyHelper(getApplicationContext());
     }
 
     public String[] getBondedDevices(boolean isBLE)
@@ -45,12 +47,6 @@ public class MainActivity extends QtActivity
 
     public void connectToDevice(String address)
     {
-        ProfileProxyHelper helper = new ProfileProxyHelper();
-        BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
-        // UpperCase is mandatory there
-        BluetoothDevice device = BTAdapter.getRemoteDevice(address.toUpperCase());
-        helper.setTargetDevice(device);
-        BTAdapter.getProfileProxy(getApplicationContext(), helper, BluetoothProfile.A2DP);
-        BTAdapter.getProfileProxy(getApplicationContext(), helper, BluetoothProfile.HEADSET);
+        mPPHelper.connectToDevice(address);
     }
 }
