@@ -22,6 +22,7 @@ public:
     void setDeviceName(const QString& deviceName);
     bool setMaxNameLength(int length);
     bool hideWidget(const QString &widgetName);
+    void clearAddress();
 public slots:
     void processData(const QByteArray &data);
     void readSettings();
@@ -29,6 +30,7 @@ protected:
     Ui::BaseDevice *ui;
     bool m_isSavingToFile = false;
     QString m_deviceName;
+    QString m_address;
     // max length can be 24, 29, 30 or 35
     // the default length is 24
     int m_maxNameLength = 24;
@@ -81,6 +83,7 @@ private slots:
     void on_fileWriteDeviceButton_clicked();
     void onCommandPushed(const QByteArray& cmd, const QString &name = QString(), int priority = 0);
     void onCommandPushed(const char *hexCmd, const QString &name = QString(), int priority = 0);
+    void on_connectAudioButton_clicked();
 };
 
 #endif // BASEDEVICE_H

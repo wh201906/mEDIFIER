@@ -179,6 +179,10 @@ void MainWindow::connectDevice2Comm()
     connect(this, &MainWindow::readSettings, m_device, &BaseDevice::readSettings);
     connect(m_device, &BaseDevice::showMessage, this, &MainWindow::showMessage);
     connect(m_comm, &Comm::deviceFeature, this, &MainWindow::processDeviceFeature);
+
+    // Calling MainWindow::connectDevice2Comm() indicates the m_device is reconnected
+    // Clear the cached MAC address
+    m_device->clearAddress();
 }
 
 void MainWindow::processDeviceFeature(const QString& feature, bool isBLE)

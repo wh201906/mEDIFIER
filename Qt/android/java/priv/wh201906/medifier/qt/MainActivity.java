@@ -42,4 +42,15 @@ public class MainActivity extends QtActivity
         String[] result = (String[]) list.toArray(new String[list.size()]);
         return result;
     }
+
+    public void connectToDevice(String address)
+    {
+        ProfileProxyHelper helper = new ProfileProxyHelper();
+        BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
+        // UpperCase is mandatory there
+        BluetoothDevice device = BTAdapter.getRemoteDevice(address.toUpperCase());
+        helper.setTargetDevice(device);
+        BTAdapter.getProfileProxy(getApplicationContext(), helper, BluetoothProfile.A2DP);
+        BTAdapter.getProfileProxy(getApplicationContext(), helper, BluetoothProfile.HEADSET);
+    }
 }

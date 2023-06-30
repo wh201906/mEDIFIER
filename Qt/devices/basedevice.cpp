@@ -6,6 +6,10 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QJsonDocument>
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#include <QAndroidJniEnvironment>
+#endif
 
 BaseDevice::BaseDevice(QWidget *parent) :
     QWidget(parent),
@@ -15,6 +19,9 @@ BaseDevice::BaseDevice(QWidget *parent) :
 
     ui->nameEdit->setMaxLength(m_maxNameLength);
     m_isSavingToFile = false;
+#ifndef Q_OS_ANDROID
+    ui->connectAudioButton->hide();
+#endif
 
     connect(ui->noiseNormalButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInNoiseGroupClicked);
     connect(ui->noiseReductionButton, &QRadioButton::clicked, this, &BaseDevice::onBtnInNoiseGroupClicked);
@@ -268,7 +275,9 @@ void BaseDevice::processData(const QByteArray& data)
             const char cmd = data[2];
             if(cmd == '\xC8' && len == 7)
             {
-                ui->MACLabel->setText(data.right(6).toHex(':'));
+                QString address = data.right(6).toHex(':');
+                ui->MACLabel->setText(address);
+                m_address = address;
             }
             else if(cmd == '\xC6' && len == 4)
             {
@@ -444,6 +453,11 @@ bool BaseDevice::hideWidget(const QString& widgetName)
     return true;
 }
 
+void BaseDevice::clearAddress()
+{
+    m_address.clear();
+}
+
 void BaseDevice::onCommandPushed(const QByteArray &cmd, const QString &name, int priority)
 {
     if(m_isSavingToFile)
@@ -472,7 +486,12 @@ void BaseDevice::onCommandPushed(const char* hexCmd, const QString& name, int pr
 
 void BaseDevice::on_fileSaveButton_clicked()
 {
-    QString filename = QFileDialog::getSaveFileName(this);
+    QString caption = tr("Save Settings");
+#ifdef Q_OS_ANDROID
+    // On Android, caption will be used as the default filename
+    caption = m_deviceName + ".json";
+#endif
+    QString filename = QFileDialog::getSaveFileName(this, caption, m_deviceName + ".json");
     if(filename.isEmpty())
         return;
 
@@ -576,3 +595,34 @@ void BaseDevice::on_fileWriteDeviceButton_clicked()
     QTimer::singleShot(i, [ = ] {QMessageBox::information(this, tr("Info"), tr("Done"));});
 
 }
+
+void BaseDevice::on_connectAudioButton_clicked()
+{
+#ifdef Q_OS_ANDROID
+    // Get MAC address for audio
+    on_MACGetButton_clicked();
+
+    // Disconnect
+    QTimer::singleShot(300, [ = ]
+    {
+        if(m_address.isEmpty())
+            qDebug() << "Error: m_address is not set";
+        else
+            emit sendCommand("CD"); // on_disconenctButton_clicked() without confirmation
+    });
+
+    // Connect Audio
+    QTimer::singleShot(600, [ = ]
+    {
+        if(m_address.isEmpty())
+        {
+            qDebug() << "Error: m_address is not set";
+            return;
+        }
+        QAndroidJniEnvironment androidEnv;
+        QAndroidJniObject addressObj = QAndroidJniObject::fromString(m_address);
+        QtAndroid::androidActivity().callMethod<void>("connectToDevice", "(Ljava/lang/String;)V", addressObj.object<jstring>());
+    });
+#endif
+}
+

@@ -105,6 +105,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="connectAudioButton">
+     <property name="text">
+      <string>Connect Audio</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="nameGroup">
      <property name="title">
       <string>Name</string>
