@@ -11,6 +11,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QTimer>
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #endif
@@ -19,21 +20,26 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    // MainWindow only have one instance so this should work
+    m_ptr = this;
     ui->setupUi(this);
 
 
     m_deviceForm = new DeviceForm;
     m_device = new BaseDevice;
-    m_device->hideWidget("");
+    m_devForm = new DevForm;
     ui->tabWidget->setTabText(0, m_device->windowTitle());
-    ui->tabWidget->insertTab(0, m_deviceForm, tr("Device"));
     ui->scrollAreaWidgetContents->layout()->addWidget(m_device);
+
+    ui->tabWidget->insertTab(0, m_deviceForm, tr("Device"));
     ui->tabWidget->setCurrentIndex(0);
 
     connect(m_deviceForm, &DeviceForm::connectTo, this, &MainWindow::connectToDevice);
     connect(m_deviceForm, &DeviceForm::disconnectDevice, this, &MainWindow::disconnectDevice);
     connect(m_deviceForm, &DeviceForm::showMessage, this, &MainWindow::showMessage);
     connect(this, &MainWindow::commStateChanged, m_deviceForm, &DeviceForm::onCommStateChanged);
+    connect(m_devForm, &DevForm::showMessage, this, &MainWindow::showMessage);
+    connect(this, &MainWindow::devMessage, m_devForm, &DevForm::handleDevMessage);
 
     loadDeviceInfo();
 
@@ -199,6 +205,42 @@ void MainWindow::processDeviceFeature(const QString& feature, bool isBLE)
         }
     }
 }
+
+void MainWindow::on_tabWidget_tabBarClicked(int index)
+{
+    Q_UNUSED(index);
+    m_clickCounter++;
+    if(m_clickCounter >= 8)
+    {
+        m_isDevMode = !m_isDevMode;
+        m_clickCounter = 0;
+        if(m_isDevMode)
+        {
+            showMessage(tr("Dev Mode ON"));
+            qInstallMessageHandler(devMessageHandler);
+            if(ui->tabWidget->indexOf(m_devForm) == -1)
+                ui->tabWidget->addTab(m_devForm, m_devForm->windowTitle());
+        }
+        else
+        {
+            showMessage(tr("Dev Mode OFF"));
+            qInstallMessageHandler(0);
+            int devTabId = ui->tabWidget->indexOf(m_devForm);
+            if(devTabId != -1)
+                ui->tabWidget->removeTab(devTabId);
+        }
+    }
+    QTimer::singleShot(5000, [&] {m_clickCounter = 0;});
+}
+
+void MainWindow::devMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+    if(m_ptr != nullptr)
+        emit m_ptr->devMessage(type, context, msg);
+}
+
+
+MainWindow* MainWindow::m_ptr = nullptr;
 
 const char* MainWindow::m_translatedNames[] =
 {

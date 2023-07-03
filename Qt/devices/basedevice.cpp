@@ -614,7 +614,7 @@ void BaseDevice::on_connectAudioButton_clicked()
     });
 
     // Connect Audio
-    i += 2500; // must be greater than or equal to 2500ms
+    i += 2500; // must >= 2500ms
     QTimer::singleShot(i, [ = ]
     {
         if(m_address.isEmpty())

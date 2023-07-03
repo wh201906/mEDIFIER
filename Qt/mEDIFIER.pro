@@ -12,6 +12,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    devform.cpp \
     main.cpp \
     mainwindow.cpp \
     comms/comm.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
     devices/basedevice.cpp
 
 HEADERS += \
+    devform.h \
     mainwindow.h \
     comms/comm.h \
     comms/commrfcomm.h \
@@ -31,6 +33,7 @@ HEADERS += \
     devices/basedevice.h
 
 FORMS += \
+    devform.ui \
     mainwindow.ui \
     deviceform.ui \
     devices/basedevice.ui
