@@ -17,8 +17,8 @@ DeviceForm::DeviceForm(QWidget *parent) :
     ui->setupUi(this);
 
     // the userData there is "isBLE"
-    ui->deviceTypeBox->addItem(tr("RFCOMM"), false);
-    ui->deviceTypeBox->addItem(tr("BLE"), true);
+    ui->deviceTypeBox->addItem("RFCOMM", false);
+    ui->deviceTypeBox->addItem("BLE", true);
 
     ui->disconnectButton->setVisible(false);
     ui->searchStopButton->setVisible(false);
@@ -148,10 +148,33 @@ void DeviceForm::onCommStateChanged(bool connected)
     ui->disconnectButton->setVisible(connected);
 }
 
+void DeviceForm::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    if(m_settings == nullptr)
+        return;
+    m_settings->beginGroup("DeviceForm");
+    ui->deviceAddressEdit->setText(m_settings->value("LastDeviceAddress").toString());
+    int lastDeviceTypeIndex = ui->deviceTypeBox->findText(m_settings->value("LastDeviceType").toString());
+    if(lastDeviceTypeIndex > -1 && lastDeviceTypeIndex < ui->deviceTypeBox->count())
+        ui->deviceTypeBox->setCurrentIndex(lastDeviceTypeIndex);
+    m_settings->endGroup();
+}
+
 void DeviceForm::on_connectButton_clicked()
 {
+    QString addressStr = ui->deviceAddressEdit->text();
+    if(QBluetoothAddress(addressStr).isNull())
+    {
+        emit showMessage(tr("Not a valid Bluetooth address"));
+        return;
+    }
     bool isBLE = ui->deviceTypeBox->currentData().toBool();
-    emit connectTo(ui->deviceAddressEdit->text(), isBLE);
+    emit connectTo(addressStr, isBLE);
+    m_settings->beginGroup("DeviceForm");
+    m_settings->setValue("LastDeviceAddress", addressStr);
+    m_settings->setValue("LastDeviceType", ui->deviceTypeBox->currentText());
+    m_settings->endGroup();
 }
 
 void DeviceForm::on_disconnectButton_clicked()
@@ -163,6 +186,11 @@ void DeviceForm::on_searchStopButton_clicked()
 {
     m_discoveryAgent->stop();
     onDiscoverFinished();
+}
+
+void DeviceForm::setSettings(QSettings* settings)
+{
+    m_settings = settings;
 }
 
 #ifdef Q_OS_ANDROID

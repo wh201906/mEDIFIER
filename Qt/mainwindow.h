@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QJsonObject>
+#include <QSettings>
 
 #include "deviceform.h"
 #include "devform.h"
@@ -41,6 +42,7 @@ private:
     QHash<QBluetoothUuid, QString> m_deviceServiceMap;
     int m_clickCounter = 0;
     bool m_isDevMode = false;
+    QSettings* m_settings = nullptr;
     static MainWindow* m_ptr;
     static const char* m_translatedNames[];
 

@@ -12,6 +12,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QTimer>
+#include <QFileInfo>
+#include <QStandardPaths>
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #endif
@@ -24,10 +26,31 @@ MainWindow::MainWindow(QWidget *parent)
     m_ptr = this;
     ui->setupUi(this);
 
+#ifdef Q_OS_ANDROID
+    m_settings = new QSettings("wh201906", "mEDIFIER");
+#else
+    // Firstly, find it in current working directory
+    QString configPath = "preference.ini";
+    if(!QFileInfo::exists(configPath))
+    {
+        // Then, find it in AppConfigLocation
+        configPath = QStandardPaths::locate(QStandardPaths::AppConfigLocation, "preference.ini");
+        if(configPath.isEmpty() || !QFileInfo::exists(configPath))
+        {
+            // If no config file is found, create one in current working directory
+            configPath = "preference.ini";
+        }
+    }
+    m_settings = new QSettings(configPath, QSettings::IniFormat);
+    m_settings->setIniCodec("UTF-8");
+#endif
 
     m_deviceForm = new DeviceForm;
     m_device = new BaseDevice;
     m_devForm = new DevForm;
+
+    m_deviceForm->setSettings(m_settings);
+
     ui->tabWidget->setTabText(0, m_device->windowTitle());
     ui->scrollAreaWidgetContents->layout()->addWidget(m_device);
 

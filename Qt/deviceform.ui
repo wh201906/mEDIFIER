@@ -80,7 +80,11 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="deviceAddressEdit"/>
+      <widget class="QLineEdit" name="deviceAddressEdit">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QComboBox" name="deviceTypeBox"/>

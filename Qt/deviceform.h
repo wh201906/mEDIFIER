@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QThread>
+#include <QSettings>
 
 #ifdef Q_OS_WIN
 #include "comms/winbthelper.h"
@@ -21,8 +22,11 @@ class DeviceForm : public QWidget
 public:
     explicit DeviceForm(QWidget *parent = nullptr);
     ~DeviceForm();
+    void setSettings(QSettings *settings);
 public slots:
     void onCommStateChanged(bool connected);
+protected:
+    void showEvent(QShowEvent *event) override;
 private slots:
     void onSearchButtonClicked();
 
@@ -41,6 +45,7 @@ private:
     QBluetoothDeviceDiscoveryAgent *m_discoveryAgent = nullptr;
     bool m_isCurrDiscoveryMethodBLE = false;
     QStringList m_shownDevices;
+    QSettings* m_settings = nullptr;
 #ifdef Q_OS_WIN
     WinBTHelper* m_winBTHelper = nullptr;
     QThread* m_winBTThread = nullptr;
