@@ -54,7 +54,7 @@ DISTFILES += \
     android/AndroidManifest.xml
 
 # Remember to change version in AndroidManifest.xml
-VERSION = 0.1.0
+VERSION = 0.2.0
 # Expose VERSION to the source files.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 QMAKE_TARGET_PRODUCT = "mEDIFIER"
