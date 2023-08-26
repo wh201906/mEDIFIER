@@ -1,7 +1,7 @@
 #include "commble.h"
 
 #include <QBluetoothLocalDevice>
-#include <QTimer>
+#include <QDateTime>
 
 CommBLE::CommBLE(QObject *parent)
     : Comm{parent}
@@ -139,13 +139,8 @@ void CommBLE::onDataArrived(const QLowEnergyCharacteristic &characteristic, cons
     lastReceiveTime = QDateTime::currentMSecsSinceEpoch();
     rxBuffer.append(newValue);
     handlePackets();
-
-    // clear buffer if timeout
-    QTimer::singleShot(packetTimeoutMs + 50, [&]
-    {
-        if(QDateTime::currentMSecsSinceEpoch() - lastReceiveTime >= packetTimeoutMs)
-            rxBuffer.clear();
-    });
+    if(!rxBufferCleaner->isActive())
+        rxBufferCleaner->start();
 }
 
 qint64 CommBLE::write(const QByteArray &data)

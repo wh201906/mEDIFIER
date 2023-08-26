@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QBluetoothAddress>
-#include <QDateTime>
+#include <QTimer>
 
 class Comm : public QObject
 {
@@ -28,8 +28,10 @@ protected:
 
     QByteArray rxBuffer;
     qint64 lastReceiveTime = 0;
+    QTimer* rxBufferCleaner;
 protected slots:
     void onReadyRead();
+    void rxBufferCleanTask();
 signals:
     void newData(const QByteArray& data);
     void stateChanged(bool connected);

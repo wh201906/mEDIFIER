@@ -1,14 +1,15 @@
 #include "comm.h"
 
 #include <QDebug>
-#include <QTimer>
 #include <QBluetoothLocalDevice>
 #include <QDateTime>
 
 Comm::Comm(QObject *parent)
     : QObject{parent}
 {
-
+    rxBufferCleaner = new QTimer();
+    connect(rxBufferCleaner, &QTimer::timeout, this, &Comm::rxBufferCleanTask);
+    rxBufferCleaner->setInterval(packetTimeoutMs);
 }
 
 bool Comm::sendCommand(const QByteArray& cmd, bool isRaw)
@@ -52,13 +53,8 @@ void Comm::onReadyRead()
     QByteArray rawData = qobject_cast<QIODevice*>(sender())->readAll();
     rxBuffer.append(rawData);
     handlePackets();
-
-    // clear buffer if timeout
-    QTimer::singleShot(packetTimeoutMs + 50, [&]
-    {
-        if(QDateTime::currentMSecsSinceEpoch() - lastReceiveTime >= packetTimeoutMs)
-            rxBuffer.clear();
-    });
+    if(!rxBufferCleaner->isActive())
+        rxBufferCleaner->start();
 }
 
 QByteArray Comm::addPacketHead(QByteArray cmd)
@@ -132,4 +128,13 @@ QBluetoothAddress Comm::getLocalAddress()
         }
     }
     return localAddress;
+}
+
+void Comm::rxBufferCleanTask()
+{
+    if(QDateTime::currentMSecsSinceEpoch() - lastReceiveTime >= packetTimeoutMs)
+    {
+        rxBuffer.clear();
+        rxBufferCleaner->stop();
+    }
 }
