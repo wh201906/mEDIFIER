@@ -1,4 +1,4 @@
-package priv.wh201906.medifier.qt;
+package io.github.wh201906.medifier.qt;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothA2dp;

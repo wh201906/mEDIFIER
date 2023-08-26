@@ -1,4 +1,4 @@
-package priv.wh201906.medifier.qt;
+package io.github.wh201906.medifier.qt;
 
 import org.qtproject.qt5.android.bindings.QtActivity;
 
