@@ -134,20 +134,18 @@ void CommBLE::onErrorOccurred()
 
 void CommBLE::onDataArrived(const QLowEnergyCharacteristic &characteristic, const QByteArray &newValue)
 {
+    // similar to Comm::onReadyRead()
     Q_UNUSED(characteristic);
-//    qDebug() << "raw received:" << newValue.toHex();
+    lastReceiveTime = QDateTime::currentMSecsSinceEpoch();
+    rxBuffer.append(newValue);
+    handlePackets();
 
-    // checksum is removed there.
-    QByteArray data = checkValidity(newValue);
-    if(!data.isEmpty())
+    // clear buffer if timeout
+    QTimer::singleShot(packetTimeoutMs + 50, [&]
     {
-        qDebug() << "received:" << data.toHex();
-        emit newData(data);
-    }
-    else
-    {
-        qDebug() << "received unexpected:" << newValue.toHex();
-    }
+        if(QDateTime::currentMSecsSinceEpoch() - lastReceiveTime >= packetTimeoutMs)
+            rxBuffer.clear();
+    });
 }
 
 qint64 CommBLE::write(const QByteArray &data)

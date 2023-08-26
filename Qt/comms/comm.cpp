@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QBluetoothLocalDevice>
+#include <QDateTime>
 
 Comm::Comm(QObject *parent)
     : QObject{parent}
@@ -24,20 +25,40 @@ bool Comm::sendCommand(const char *hexCmd, bool isRaw)
     return sendCommand(QByteArray::fromHex(hexCmd), isRaw);
 }
 
+void Comm::handlePackets()
+{
+    while(!rxBuffer.isEmpty())
+    {
+        int packetLen = getPacketLenInBuffer();
+        if(packetLen == 0)
+            break;
+        QByteArray data = removeCheckSum(rxBuffer.left(packetLen));
+        rxBuffer.remove(0, packetLen);
+        if(!data.isEmpty())
+        {
+            qDebug() << "received:" << data.toHex();
+            emit newData(data);
+        }
+        else
+        {
+            qDebug() << "received unexpected:" << rxBuffer.toHex();
+        }
+    }
+}
+
 void Comm::onReadyRead()
 {
+    lastReceiveTime = QDateTime::currentMSecsSinceEpoch();
     QByteArray rawData = qobject_cast<QIODevice*>(sender())->readAll();
-    // checksum is removed there.
-    QByteArray data = checkValidity(rawData);
-    if(!data.isEmpty())
+    rxBuffer.append(rawData);
+    handlePackets();
+
+    // clear buffer if timeout
+    QTimer::singleShot(packetTimeoutMs + 50, [&]
     {
-        qDebug() << "received:" << data.toHex();
-        emit newData(data);
-    }
-    else
-    {
-        qDebug() << "received unexpected:" << rawData.toHex();
-    }
+        if(QDateTime::currentMSecsSinceEpoch() - lastReceiveTime >= packetTimeoutMs)
+            rxBuffer.clear();
+    });
 }
 
 QByteArray Comm::addPacketHead(QByteArray cmd)
@@ -74,25 +95,25 @@ QByteArray Comm::removeCheckSum(QByteArray data)
     }
 }
 
-QByteArray Comm::checkValidity(QByteArray data)
+int Comm::getPacketLenInBuffer()
 {
-    if(data[0] != '\xBB' && data[0] != '\xCC')
+    if(rxBuffer[0] != '\xBB' && rxBuffer[0] != '\xCC')
     {
         qDebug() << "error:"
-                 << "unexpected head:" << (int)data[0]
-                 << "data:" << data.toHex();
-        return QByteArray();
+                 << "unexpected head:" << (int)rxBuffer[0]
+                 << "data:" << rxBuffer.toHex();
+        return 0;
     }
-    int expectedLength = (int)data[1] + 4;
-    if(expectedLength != data.length())
+    int expectedLength = (int)rxBuffer[1] + 4;
+    if(rxBuffer.length() < expectedLength)
     {
         qDebug() << "packet length error:"
                  << "expected:" << expectedLength
-                 << "received:" << data.length()
-                 << "data:" << data.toHex();
-        return QByteArray();
+                 << "received:" << rxBuffer.length()
+                 << "data:" << rxBuffer.toHex();
+        return 0;
     }
-    return removeCheckSum(data);
+    return expectedLength;
 }
 
 QBluetoothAddress Comm::getLocalAddress()
