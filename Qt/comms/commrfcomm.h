@@ -16,6 +16,7 @@ protected:
     qint64 write(const QByteArray &data) override;
 private slots:
     void onStateChanged();
+    void onErrorOccurred(QBluetoothSocket::SocketError error);
 private:
     QBluetoothSocket* m_socket = nullptr;
     const QBluetoothUuid m_serviceUUID = QBluetoothUuid(QStringLiteral("EDF00000-EDFE-DFED-FEDF-EDFEDFEDFEDF"));
