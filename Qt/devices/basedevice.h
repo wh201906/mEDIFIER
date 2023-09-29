@@ -77,6 +77,8 @@ signals:
     void pushCommand(const QByteArray& cmd, const QString& name = QString(), int priority = 0);
     void pushCommand(const char* hexCmd, const QString& name = QString(), int priority = 0);
     void showMessage(const QString& msg);
+    void connectToAudio(const QString &address);
+    void updateLastAudioDeviceAddress(const QString &address);
 private slots:
     void on_autoPoweroffBox_clicked();
     void on_fileSaveButton_clicked();

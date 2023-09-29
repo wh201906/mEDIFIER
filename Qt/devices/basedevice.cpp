@@ -6,10 +6,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QJsonDocument>
-#ifdef Q_OS_ANDROID
-#include <QtAndroid>
-#include <QAndroidJniEnvironment>
-#endif
 
 BaseDevice::BaseDevice(QWidget *parent) :
     QWidget(parent),
@@ -278,6 +274,7 @@ void BaseDevice::processData(const QByteArray& data)
                 QString address = data.right(6).toHex(':');
                 ui->MACLabel->setText(address);
                 m_address = address;
+                emit updateLastAudioDeviceAddress(address);
             }
             else if(cmd == '\xC6' && len == 4)
             {
@@ -608,23 +605,24 @@ void BaseDevice::on_connectAudioButton_clicked()
     QTimer::singleShot(i, [ = ]
     {
         if(m_address.isEmpty())
+        {
             qDebug() << "Error: m_address is not set";
+            if(QMessageBox::question(this, tr("Info"), tr("You haven't connect to any device yet\nUse last audio device?"), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel) == QMessageBox::Ok)
+                emit connectToAudio("");
+        }
         else
+        {
             emit sendCommand("CD"); // on_disconenctButton_clicked() without confirmation
+        }
     });
 
     // Connect Audio
     i += 2500; // must >= 2500ms
     QTimer::singleShot(i, [ = ]
     {
-        if(m_address.isEmpty())
-        {
-            qDebug() << "Error: m_address is not set";
-            return;
-        }
-        QAndroidJniEnvironment androidEnv;
-        QAndroidJniObject addressObj = QAndroidJniObject::fromString(m_address);
-        QtAndroid::androidActivity().callMethod<void>("connectToDevice", "(Ljava/lang/String;)V", addressObj.object<jstring>());
+        // might be triggered after connectToAudio(""), but it doesn't matter
+        if(!m_address.isEmpty())
+            emit connectToAudio(m_address);
     });
 #endif
 }

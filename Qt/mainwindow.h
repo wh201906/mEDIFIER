@@ -29,6 +29,8 @@ public:
     static void devMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg);
 public slots:
     void showMessage(const QString &msg);
+    void connectToAudio(const QString &address);
+    void updateLastAudioDeviceAddress(const QString &address);
 private:
     Ui::MainWindow *ui;
 

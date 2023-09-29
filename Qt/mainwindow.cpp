@@ -16,6 +16,7 @@
 #include <QStandardPaths>
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
+#include <QAndroidJniEnvironment>
 #endif
 
 MainWindow::MainWindow(QWidget *parent)
@@ -46,13 +47,10 @@ MainWindow::MainWindow(QWidget *parent)
 #endif
 
     m_deviceForm = new DeviceForm;
-    m_device = new BaseDevice;
+    // m_device = new BaseDevice; // in changeDevice()
     m_devForm = new DevForm;
 
     m_deviceForm->setSettings(m_settings);
-
-    ui->tabWidget->setTabText(0, m_device->windowTitle());
-    ui->scrollAreaWidgetContents->layout()->addWidget(m_device);
 
     ui->tabWidget->insertTab(0, m_deviceForm, tr("Device"));
     ui->tabWidget->setCurrentIndex(0);
@@ -65,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::devMessage, m_devForm, &DevForm::handleDevMessage);
 
     loadDeviceInfo();
+    changeDevice("basedevice");
 
 #ifdef Q_OS_ANDROID
     ui->statusBar->hide();
@@ -148,6 +147,40 @@ void MainWindow::on_readSettingsButton_clicked()
         showMessage(tr("Device not connected"));
 }
 
+void MainWindow::connectToAudio(const QString& address)
+{
+#ifdef Q_OS_ANDROID
+    QAndroidJniEnvironment androidEnv;
+    QAndroidJniObject addressObj;
+    if(address.isEmpty())
+    {
+        m_settings->beginGroup("Global");
+        QString lastAddress = m_settings->value("LastAudioDeviceAddress").toString();
+        m_settings->endGroup();
+        if(lastAddress.isEmpty())
+        {
+            qDebug() << "Info: last audio device address is empty";
+            return;
+        }
+        qDebug() << "Info: using last audio device address:" << lastAddress;
+        addressObj = QAndroidJniObject::fromString(lastAddress);
+    }
+    else
+    {
+        qDebug() << "Info: audio device address:" << address;
+        addressObj = QAndroidJniObject::fromString(address);
+    }
+    QtAndroid::androidActivity().callMethod<void>("connectToDevice", "(Ljava/lang/String;)V", addressObj.object<jstring>());
+#endif
+}
+
+void MainWindow::updateLastAudioDeviceAddress(const QString& address)
+{
+    m_settings->beginGroup("Global");
+    m_settings->setValue("LastAudioDeviceAddress", address);
+    m_settings->endGroup();
+}
+
 void MainWindow::showMessage(const QString& msg)
 {
 #ifdef Q_OS_ANDROID
@@ -183,6 +216,12 @@ void MainWindow::changeDevice(const QString& deviceName)
     {
         m_device->hideWidget(it.toString());
     }
+
+    connect(this, &MainWindow::readSettings, m_device, &BaseDevice::readSettings);
+    connect(m_device, &BaseDevice::showMessage, this, &MainWindow::showMessage);
+    connect(m_device, &BaseDevice::connectToAudio, this, &MainWindow::connectToAudio);
+    connect(m_device, &BaseDevice::updateLastAudioDeviceAddress, this, &MainWindow::updateLastAudioDeviceAddress);
+
     connectDevice2Comm();
 
     ui->tabWidget->setTabText(1, m_device->windowTitle());
@@ -205,8 +244,6 @@ void MainWindow::connectDevice2Comm()
     connect(m_device, QOverload<const QByteArray&, bool>::of(&BaseDevice::sendCommand), m_comm, QOverload<const QByteArray&, bool>::of(&Comm::sendCommand));
     connect(m_device, QOverload<const char*, bool>::of(&BaseDevice::sendCommand), m_comm, QOverload<const char*, bool>::of(&Comm::sendCommand));
     connect(m_comm, &Comm::newData, m_device, &BaseDevice::processData);
-    connect(this, &MainWindow::readSettings, m_device, &BaseDevice::readSettings);
-    connect(m_device, &BaseDevice::showMessage, this, &MainWindow::showMessage);
     connect(m_comm, &Comm::deviceFeature, this, &MainWindow::processDeviceFeature);
 
     // Calling MainWindow::connectDevice2Comm() indicates the m_device is reconnected
@@ -223,7 +260,7 @@ void MainWindow::processDeviceFeature(const QString& feature, bool isBLE)
         if(m_deviceServiceMap.contains(serviceUUID))
         {
             int index = ui->deviceBox->findData(m_deviceServiceMap[serviceUUID]);
-            ui->deviceBox->setCurrentIndex(index);
+            ui->deviceBox->setCurrentIndex(index); // triggers changeDevice()
             showMessage(tr("Device detected") + ": " + ui->deviceBox->currentText());
         }
     }
