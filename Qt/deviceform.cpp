@@ -50,6 +50,9 @@ DeviceForm::~DeviceForm()
 
 void DeviceForm::onSearchButtonClicked()
 {
+#ifdef Q_OS_ANDROID
+    getRequiredPermission();
+#endif
     if(Comm::getLocalAddress().isNull())
     {
         emit showMessage(tr("Bluetooth is not available"));
@@ -207,9 +210,8 @@ bool DeviceForm::getPermission(const QString& permission)
     return true;
 }
 
-void DeviceForm::getBondedTarget(bool isBLE)
+void DeviceForm::getRequiredPermission()
 {
-    QAndroidJniEnvironment androidEnv;
     QStringList permissionList =
     {
         "android.permission.ACCESS_FINE_LOCATION",
@@ -229,7 +231,12 @@ void DeviceForm::getBondedTarget(bool isBLE)
         if(!getPermission(permission))
             qDebug() << "Failed to request permission" << permission;
     }
+}
 
+void DeviceForm::getBondedTarget(bool isBLE)
+{
+    QAndroidJniEnvironment androidEnv;
+    getRequiredPermission();
     QAndroidJniObject array = QtAndroid::androidActivity().callObjectMethod("getBondedDevices", "(Z)[Ljava/lang/String;", isBLE);
     int arrayLen = androidEnv->GetArrayLength(array.object<jarray>());
     qDebug() << "arrayLen:" << arrayLen;

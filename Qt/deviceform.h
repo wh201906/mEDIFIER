@@ -52,6 +52,7 @@ private:
 #endif
 #ifdef Q_OS_ANDROID
     bool getPermission(const QString& permission);
+    void getRequiredPermission();
     void getBondedTarget(bool isBLE);
 #endif
 signals:
