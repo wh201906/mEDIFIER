@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.wh201906.medifier.qt</id>
+
+  <name>mEDIFIER</name>
+  <summary>An open-source alternative to the Edifier Connect app</summary>
+  <summary xml:lang="zh">官方漫步者APP的开源替代版</summary>
+
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <content_rating type="oars-1.1" />
+
+  <description>
+    <p>An open-source alternative to the Edifier Connect app</p>
+    <p xml:lang="zh">官方漫步者APP的开源替代版</p>
+    <p>I just don't know why the Edifier Connect takes up more than 200MB on my phone.</p>
+    <p xml:lang="zh">更小更轻便</p>
+  </description>
+
+  <url type="homepage">https://github.com/wh201906/mEDIFIER</url>
+  <url type="bugtracker">https://github.com/wh201906/mEDIFIER/issues</url>
+  <url type="vcs-browser">https://github.com/wh201906/mEDIFIER</url>
+
+  <launchable type="desktop-id">io.github.wh201906.medifier.qt.desktop</launchable>
+</component>

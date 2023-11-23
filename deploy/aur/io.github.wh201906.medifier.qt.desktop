@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=mEDIFIER
+Comment=An open-source alternative to the Edifier Connect app
+Comment[zh_CN]=官方漫步者APP的开源替代版
+Categories=AudioVideo;Audio;Utility;
+
+Icon=medifier.png
+Exec=medifier
+Terminal=false
