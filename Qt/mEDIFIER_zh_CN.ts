@@ -10,12 +10,13 @@
     </message>
     <message>
         <location filename="devices/basedevice.ui" line="26"/>
-        <location filename="devices/basedevice.cpp" line="188"/>
-        <location filename="devices/basedevice.cpp" line="194"/>
-        <location filename="devices/basedevice.cpp" line="200"/>
-        <location filename="devices/basedevice.cpp" line="206"/>
-        <location filename="devices/basedevice.cpp" line="537"/>
-        <location filename="devices/basedevice.cpp" line="595"/>
+        <location filename="devices/basedevice.cpp" line="184"/>
+        <location filename="devices/basedevice.cpp" line="190"/>
+        <location filename="devices/basedevice.cpp" line="196"/>
+        <location filename="devices/basedevice.cpp" line="202"/>
+        <location filename="devices/basedevice.cpp" line="534"/>
+        <location filename="devices/basedevice.cpp" line="592"/>
+        <location filename="devices/basedevice.cpp" line="610"/>
         <source>Info</source>
         <translation>信息</translation>
     </message>
@@ -271,80 +272,87 @@
         <translation>恢复到设备</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="188"/>
+        <location filename="devices/basedevice.cpp" line="184"/>
         <source>The device will be powered off
 Continue?</source>
         <translation>设备将会关机
 继续吗？</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="194"/>
+        <location filename="devices/basedevice.cpp" line="190"/>
         <source>The device will be disconnected
 Continue?</source>
         <translation>设备将会断开连接
 继续吗？</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="200"/>
+        <location filename="devices/basedevice.cpp" line="196"/>
         <source>The device will get into pairing state
 Continue?</source>
         <translation>设备将会进入配对模式
 继续吗？</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="206"/>
+        <location filename="devices/basedevice.cpp" line="202"/>
         <source>The device will be reseted
 Continue?</source>
         <translation>设备将会恢复出厂设置
 继续吗？</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="220"/>
+        <location filename="devices/basedevice.cpp" line="216"/>
         <source>The name is too long</source>
         <translation>设备名过长</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="489"/>
+        <location filename="devices/basedevice.cpp" line="486"/>
         <source>Save Settings</source>
         <translation>保存设置</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="533"/>
-        <location filename="devices/basedevice.cpp" line="555"/>
-        <location filename="devices/basedevice.cpp" line="562"/>
-        <location filename="devices/basedevice.cpp" line="568"/>
+        <location filename="devices/basedevice.cpp" line="530"/>
+        <location filename="devices/basedevice.cpp" line="552"/>
+        <location filename="devices/basedevice.cpp" line="559"/>
+        <location filename="devices/basedevice.cpp" line="565"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="533"/>
+        <location filename="devices/basedevice.cpp" line="530"/>
         <source>Failed to save to</source>
         <translation>无法保存至</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="537"/>
+        <location filename="devices/basedevice.cpp" line="534"/>
         <source>Saved</source>
         <translation>已保存</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="555"/>
+        <location filename="devices/basedevice.cpp" line="552"/>
         <source>Failed to open</source>
         <translation>无法打开</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="562"/>
+        <location filename="devices/basedevice.cpp" line="559"/>
         <source>Invalid JSON file</source>
         <translation>无效的JSON文件</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="568"/>
+        <location filename="devices/basedevice.cpp" line="565"/>
         <source>Invalid format</source>
         <translation>文件格式错误</translation>
     </message>
     <message>
-        <location filename="devices/basedevice.cpp" line="595"/>
+        <location filename="devices/basedevice.cpp" line="592"/>
         <source>Done</source>
         <translation>完成</translation>
+    </message>
+    <message>
+        <location filename="devices/basedevice.cpp" line="610"/>
+        <source>You haven&apos;t connect to any device yet
+Use last audio device?</source>
+        <translation>尚未连接到任何设备
+使用上次连接的音频设备吗？</translation>
     </message>
 </context>
 <context>
@@ -363,12 +371,12 @@ Continue?</source>
 <context>
     <name>CommRFCOMM</name>
     <message>
-        <location filename="comms/commrfcomm.cpp" line="36"/>
+        <location filename="comms/commrfcomm.cpp" line="37"/>
         <source>Device Connected</source>
         <translation>设备已连接</translation>
     </message>
     <message>
-        <location filename="comms/commrfcomm.cpp" line="41"/>
+        <location filename="comms/commrfcomm.cpp" line="43"/>
         <source>Device Disconnected</source>
         <translation>设备已断开</translation>
     </message>
@@ -444,24 +452,24 @@ Continue?</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="deviceform.cpp" line="109"/>
-        <location filename="deviceform.cpp" line="251"/>
+        <location filename="deviceform.cpp" line="112"/>
+        <location filename="deviceform.cpp" line="258"/>
         <source>RFCOMM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="deviceform.cpp" line="107"/>
-        <location filename="deviceform.cpp" line="249"/>
+        <location filename="deviceform.cpp" line="110"/>
+        <location filename="deviceform.cpp" line="256"/>
         <source>BLE</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="deviceform.cpp" line="55"/>
+        <location filename="deviceform.cpp" line="58"/>
         <source>Bluetooth is not available</source>
         <translation>蓝牙不可用</translation>
     </message>
     <message>
-        <location filename="deviceform.cpp" line="169"/>
+        <location filename="deviceform.cpp" line="172"/>
         <source>Not a valid Bluetooth address</source>
         <translation>蓝牙地址无效</translation>
     </message>
@@ -479,42 +487,42 @@ Continue?</source>
         <translation>读取设置</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="57"/>
+        <location filename="mainwindow.cpp" line="55"/>
         <source>Device</source>
         <translation>设备</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="148"/>
+        <location filename="mainwindow.cpp" line="147"/>
         <source>Device not connected</source>
         <translation>设备未连接</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="227"/>
+        <location filename="mainwindow.cpp" line="264"/>
         <source>Device detected</source>
         <translation>识别到设备</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="242"/>
+        <location filename="mainwindow.cpp" line="279"/>
         <source>Dev Mode ON</source>
         <translation>调试模式已启用</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="249"/>
+        <location filename="mainwindow.cpp" line="286"/>
         <source>Dev Mode OFF</source>
         <translation>调试模式已关闭</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="270"/>
+        <location filename="mainwindow.cpp" line="307"/>
         <source>Generic Device</source>
         <translation>通用设备</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="271"/>
+        <location filename="mainwindow.cpp" line="308"/>
         <source>W820NB Double Gold</source>
         <translation>W820NB双金标版</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="272"/>
+        <location filename="mainwindow.cpp" line="309"/>
         <source>W200BT Plus</source>
         <translation></translation>
     </message>
