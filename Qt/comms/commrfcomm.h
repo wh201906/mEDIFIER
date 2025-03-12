@@ -10,7 +10,7 @@ class CommRFCOMM : public Comm
     Q_OBJECT
 public:
     explicit CommRFCOMM(QObject *parent = nullptr);
-    void open(const QString& address) override;
+    void open(const QBluetoothDeviceInfo& deviceInfo) override;
     void close() override;
 protected:
     qint64 write(const QByteArray &data) override;

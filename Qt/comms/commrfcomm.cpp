@@ -1,6 +1,7 @@
 #include "commrfcomm.h"
 
 #include <QBluetoothLocalDevice>
+#include <QBluetoothDeviceInfo>
 
 CommRFCOMM::CommRFCOMM(QObject *parent)
     : Comm{parent}
@@ -11,9 +12,9 @@ CommRFCOMM::CommRFCOMM(QObject *parent)
     connect(m_socket, QOverload<QBluetoothSocket::SocketError>::of(&QBluetoothSocket::error), this, &CommRFCOMM::onErrorOccurred);
 }
 
-void CommRFCOMM::open(const QString &address)
+void CommRFCOMM::open(const QBluetoothDeviceInfo &deviceInfo)
 {
-    m_socket->connectToService(QBluetoothAddress(address), m_serviceUUID);
+    m_socket->connectToService(deviceInfo.address(), m_serviceUUID);
 }
 
 void CommRFCOMM::close()

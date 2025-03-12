@@ -99,7 +99,7 @@ void MainWindow::loadDeviceInfo()
     }
 }
 
-void MainWindow::connectToDevice(const QString& address, bool isBLE)
+void MainWindow::connectToDevice(const QBluetoothDeviceInfo& address, bool isBLE)
 {
     if(m_comm != nullptr)
     {

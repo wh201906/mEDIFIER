@@ -52,7 +52,7 @@ private:
     void connectDevice2Comm();
     void loadDeviceInfo();
 private slots:
-    void connectToDevice(const QString &address, bool isBLE);
+    void connectToDevice(const QBluetoothDeviceInfo &address, bool isBLE);
     void disconnectDevice();
     void onCommStateChanged(bool state);
     void on_readSettingsButton_clicked();

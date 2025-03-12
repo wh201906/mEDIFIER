@@ -91,12 +91,16 @@ void DeviceForm::onSearchButtonClicked()
 void DeviceForm::onDeviceDiscovered(const QBluetoothDeviceInfo &info)
 {
     QString address = info.address().toString();
+    QString uuid = info.deviceUuid().toString(QUuid::StringFormat::WithoutBraces);
     QString name = info.name();
-    if(m_shownDevices.contains(address, Qt::CaseInsensitive))
-    {
-        qDebug() << "dumplicate:" << address << name;
-        return;
+    
+    for(QBluetoothDeviceInfo shownDevice : m_shownDevices){
+        if(shownDevice.deviceUuid() == info.deviceUuid()){
+            qDebug() << "dumplicate:" << address << uuid <<name;
+            return;
+        }
     }
+
     QTableWidget* deviceTable = ui->deviceTableWidget;
     int i;
 
@@ -112,7 +116,7 @@ void DeviceForm::onDeviceDiscovered(const QBluetoothDeviceInfo &info)
         typeItem->setText(tr("RFCOMM"));
     typeItem->setData(Qt::UserRole, m_isCurrDiscoveryMethodBLE);
     deviceTable->setItem(i, 2, typeItem);
-    m_shownDevices.append(address);
+    m_shownDevices.append(info);
 
     qDebug() << name
              << address
@@ -166,16 +170,21 @@ void DeviceForm::showEvent(QShowEvent *event)
 
 void DeviceForm::on_connectButton_clicked()
 {
-    QString addressStr = ui->deviceAddressEdit->text();
-    if(QBluetoothAddress(addressStr).isNull())
-    {
-        emit showMessage(tr("Not a valid Bluetooth address"));
+    QModelIndexList selectedRows = ui->deviceTableWidget->selectionModel()->selectedRows();
+    if(selectedRows.size() == 0){
+        emit showMessage(tr("No valid device selected"));
         return;
     }
+
+    int selectedItem = selectedRows.first().row();
+   
+    QBluetoothDeviceInfo selectedDevice = m_shownDevices[selectedItem];
+    qDebug() << selectedItem;
+
     bool isBLE = ui->deviceTypeBox->currentData().toBool();
-    emit connectTo(addressStr, isBLE);
+    emit connectTo(selectedDevice, isBLE);
     m_settings->beginGroup("DeviceForm");
-    m_settings->setValue("LastDeviceAddress", addressStr);
+    m_settings->setValue("LastDeviceAddress", selectedDevice.deviceUuid());
     m_settings->setValue("LastDeviceType", ui->deviceTypeBox->currentText());
     m_settings->endGroup();
 }

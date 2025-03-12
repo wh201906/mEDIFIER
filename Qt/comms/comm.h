@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QBluetoothAddress>
+#include <QBluetoothDeviceInfo>
 #include <QTimer>
 
 class Comm : public QObject
@@ -10,7 +11,7 @@ class Comm : public QObject
     Q_OBJECT
 public:
     explicit Comm(QObject *parent = nullptr);
-    virtual void open(const QString& address) = 0;
+    virtual void open(const QBluetoothDeviceInfo &deviceInfo) = 0;
     virtual void close() = 0;
     int getPacketLenInBuffer();
     static QByteArray addPacketHead(QByteArray cmd);

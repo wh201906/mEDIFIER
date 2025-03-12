@@ -9,7 +9,7 @@ CommBLE::CommBLE(QObject *parent)
 
 }
 
-void CommBLE::open(const QString &address)
+void CommBLE::open(const QBluetoothDeviceInfo &deviceInfo)
 {
     if(m_Controller != nullptr)
         m_Controller->deleteLater();
@@ -21,7 +21,7 @@ void CommBLE::open(const QString &address)
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     m_BLEController = new QLowEnergyController(QBluetoothAddress(address), localAddress);
 #else
-    m_Controller = QLowEnergyController::createCentral(QBluetoothAddress(address), localAddress);
+    m_Controller = QLowEnergyController::createCentral(deviceInfo);
 #endif
     connect(m_Controller, &QLowEnergyController::connected, m_Controller, &QLowEnergyController::discoverServices);
     connect(m_Controller, QOverload<QLowEnergyController::Error>::of(&QLowEnergyController::error), this, &CommBLE::onErrorOccurred);

@@ -20,7 +20,7 @@
 core
 !core/
 tags
-.DS_Store
+**/.DS_Store
 .directory
 *.debug
 Makefile*
@@ -73,3 +73,7 @@ Thumbs.db
 
 # QtCreator CMake
 CMakeLists.txt.user*
+
+moc_predefs.h
+preference.ini
+qmake_qmake_qm_files.qrc

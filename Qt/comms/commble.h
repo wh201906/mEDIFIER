@@ -9,7 +9,7 @@ class CommBLE : public Comm
     Q_OBJECT
 public:
     explicit CommBLE(QObject *parent = nullptr);
-    void open(const QString& address) override;
+    void open(const QBluetoothDeviceInfo &address) override;
     void close() override;
 protected:
     qint64 write(const QByteArray &data) override;

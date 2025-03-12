@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QBluetoothDeviceDiscoveryAgent>
+#include <QBluetoothDeviceInfo>
 #include <QThread>
 #include <QSettings>
 
@@ -44,7 +45,7 @@ private:
 
     QBluetoothDeviceDiscoveryAgent *m_discoveryAgent = nullptr;
     bool m_isCurrDiscoveryMethodBLE = false;
-    QStringList m_shownDevices;
+    QList<QBluetoothDeviceInfo> m_shownDevices;
     QSettings* m_settings = nullptr;
 #ifdef Q_OS_WIN
     WinBTHelper* m_winBTHelper = nullptr;
@@ -56,7 +57,7 @@ private:
     void getBondedTarget(bool isBLE);
 #endif
 signals:
-    void connectTo(const QString& address, bool isBLE);
+    void connectTo(const QBluetoothDeviceInfo& address, bool isBLE);
     void disconnectDevice();
     void startDiscovery();
     void showMessage(const QString& msg);
